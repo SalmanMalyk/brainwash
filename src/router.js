@@ -1,69 +1,81 @@
 import Vue from "vue";
 import Router from "vue-router";
-import AppHeader from "./layout/AppHeader";
-import AppFooter from "./layout/AppFooter";
-import Components from "./views/Components.vue";
-import Landing from "./views/Landing.vue";
-import Login from "./views/Login.vue";
-import Register from "./views/Register.vue";
-import Profile from "./views/Profile.vue";
+import Header from "./layout/starter/StarterHeader";
+import Footer from "./layout/starter/StarterFooter";
+import RegisterDevice from "./views/Register.vue";
+import Home from "./views/Home.vue";
+import SetUp from "./views/SetUp.vue";
+import Tutorial from "./views/Tutorial.vue";
+import Contact from "./views/Contact.vue";
+import Perform from "./views/Perform.vue";
+import Starter from "./views/Starter.vue";
 
 Vue.use(Router);
 
 export default new Router({
-  linkExactActiveClass: "active",
   routes: [
+    // {
+    //   path: "/",
+    //   name: "auth-check-redirect",
+    //   components: {
+    //     // header: Header,
+    //     default: Starter,
+    //     footer: Footer
+    //   }
+    // },
     {
       path: "/",
-      name: "components",
+      name: "home",
       components: {
-        header: AppHeader,
-        default: Components,
-        footer: AppFooter
+        // header: Header,
+        default: Home,
+        footer: Footer
       }
     },
     {
-      path: "/landing",
-      name: "landing",
+      path: "/register-device",
+      name: "starter",
       components: {
-        header: AppHeader,
-        default: Landing,
-        footer: AppFooter
+        // header: Header,
+        default: RegisterDevice,
+        footer: Footer
       }
     },
     {
-      path: "/login",
-      name: "login",
+      path: "/set-up",
+      name: "setup",
       components: {
-        header: AppHeader,
-        default: Login,
-        footer: AppFooter
+        header: Header,
+        default: SetUp,
+        footer: Footer
       }
     },
     {
-      path: "/register",
-      name: "register",
+      path: "/perform",
+      name: "perform",
       components: {
-        header: AppHeader,
-        default: Register,
-        footer: AppFooter
+        // header: Header,
+        default: Perform,
+        footer: Footer
       }
     },
     {
-      path: "/profile",
-      name: "profile",
+      path: "/tutorial",
+      name: "tutorial",
       components: {
-        header: AppHeader,
-        default: Profile,
-        footer: AppFooter
+        header: Header,
+        default: Tutorial,
+        footer: Footer
+      }
+    },
+    {
+      path: "/contact",
+      name: "contact",
+      components: {
+        header: Header,
+        default: Contact,
+        footer: Footer
       }
     }
-  ],
-  scrollBehavior: to => {
-    if (to.hash) {
-      return { selector: to.hash };
-    } else {
-      return { x: 0, y: 0 };
-    }
-  }
+  ]
 });
