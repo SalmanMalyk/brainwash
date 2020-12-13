@@ -29,4 +29,8 @@ export default {
 };
 </script>
 <style>
+  .active > div > span > img {
+    -webkit-filter: brightness(0%);
+    filter: brightness(0%) invert(100%)!important;
+  }
 </style>

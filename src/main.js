@@ -20,7 +20,9 @@ import App from "./App.vue";
 import router from "./router";
 import Argon from "./plugins/argon-kit";
 import './registerServiceWorker'
+import VueYouTubeEmbed from 'vue-youtube-embed'
 
+Vue.use(VueYouTubeEmbed, { global: true, componentId: "youtube-media" })
 Vue.config.productionTip = false;
 Vue.use(Argon);
 new Vue({
