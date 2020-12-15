@@ -56,7 +56,7 @@ const router = new Router({
       components: {
         // header: Header,
         default: Perform,
-        footer: Footer
+        // footer: Footer
       }
     },
     {
