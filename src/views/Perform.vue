@@ -28,6 +28,8 @@
 <script>
 export default {
   name: "perform",
-  components: {}
+  components: {},
+    methods: {
+    }
 };
 </script>

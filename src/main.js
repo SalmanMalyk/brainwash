@@ -18,14 +18,22 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+import store from "./store";
 import Argon from "./plugins/argon-kit";
 import './registerServiceWorker'
 import VueYouTubeEmbed from 'vue-youtube-embed'
+import AudioRecorder from './components/vue-audio-recorder'
+import VueSweetalert2 from 'vue-sweetalert2';
 
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+Vue.use(VueSweetalert2)
+Vue.use(AudioRecorder)
 Vue.use(VueYouTubeEmbed, { global: true, componentId: "youtube-media" })
 Vue.config.productionTip = false;
 Vue.use(Argon);
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount("#app");

@@ -9,10 +9,10 @@ import Tutorial from "./views/Tutorial.vue";
 import Contact from "./views/Contact.vue";
 import Perform from "./views/Perform.vue";
 import Starter from "./views/Starter.vue";
-
+import store from "./store";
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     // {
     //   path: "/",
@@ -79,3 +79,11 @@ export default new Router({
     }
   ]
 });
+
+const waitForStorageToBeReady = async (to, from, next) => {
+  await store.restored
+  next()
+}
+router.beforeEach(waitForStorageToBeReady)
+
+export default router
