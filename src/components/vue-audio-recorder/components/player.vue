@@ -55,7 +55,7 @@
 
       &--active {
         fill: white !important;
-        background-color: #05CBCD !important;
+        background-color: #689775 !important;
       }
     }
   }

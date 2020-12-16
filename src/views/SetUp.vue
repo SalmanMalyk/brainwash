@@ -1,21 +1,23 @@
 <template>
-    <div>
-        <section class="section section section-shaped my-0 overflow-hidden">
-            <div class="shape shape-style-1 bg-gradient-success shape-skew">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="container py-0" style="margin-bottom: 6rem!important;">
-                <tabs :fill="true" circle>
-                    <card shadow style="padding: 0px!important;">
-                        <tab-pane v-for="card in cardTypes" :key="card">
-                            <span slot="title" class="nav-link-icon d-block"><img :src="'img/icons/'+ card +'.png'" style="width: 20px;" class="imgColor"></span>
+    <div style="height: 100%!important;">
+        <section class="section section section-shaped my-0 overflow-hidden" style="height: 100%!important;">
+<!--            <div class="shape shape-style-1 bg-gradient-success shape-skew">-->
+<!--                <span></span>-->
+<!--                <span></span>-->
+<!--                <span></span>-->
+<!--                <span></span>-->
+<!--                <span></span>-->
+<!--                <span></span>-->
+<!--            </div>-->
+            <div class="container py-0" style="height: 100%!important;">
+                <tabs :fill="true" circle style="height: 100%!important;">
+                    <perfect-scrollbar style="height: 80%!important;">
+                        <card shadow style="padding: 0px!important; height: auto;">
+                        <tab-pane v-for="card in cardTypes" :key="card" >
+                            <span slot="title" class="nav-link-icon d-block">
+                                <img :src="'img/icons/'+ card +'.png'" style="width: 20px;" class="imgColor">
+                            </span>
                             <card
-                                    no-body
                                     shadow-size="lg"
                                     v-for="x in 13" :key="x"
                                     style="padding: 20px 20px 20px 0px;"
@@ -23,16 +25,16 @@
                                 <template v-if="$store.state.voiceData[card][x.toString()] !== ''">
                                     <div class="row">
                                         <div class="col-6" style="padding-left: 3rem;">
-                                            <h3 class="text-primary text-uppercase" style="font-size: 1.8rem;">{{ cardName(x.toString()) }}</h3>
+                                            <h3 class="text-uppercase" style="font-size: 1.8rem; color: #1A1A1D!important;">{{ cardName(x.toString()) }}</h3>
                                         </div>
                                         <div class="col-6 justify-content-md-center text-center">
                                             <slide-x-right-transition :duration="350" :delay="70">
                                                 <template v-if="selectedForPlay !== x">
-                                                    <base-button type="primary" icon="fa fa-play-circle" @click="selectForPlay(x)"></base-button>
-                                                    <base-button type="primary" icon="fa fa-trash" @click="deleteRecording(card, x.toString())"></base-button>
+                                                    <base-button type="primary" icon="fa fa-play-circle" @click="selectForPlay(x)" class=" bg-gradient-primary "></base-button>
+                                                    <base-button type="primary" icon="fa fa-trash" @click="deleteRecording(card, x.toString())" class="bg-gradient-primary"></base-button>
                                                 </template>
                                                 <template v-else>
-                                                    <base-button type="primary" icon="fa fa-stop-circle" @click="resetPlay()">Close</base-button>
+                                                    <base-button type="primary" icon="fa fa-stop-circle" @click="resetPlay()" class="bg-gradient-primary">Close</base-button>
                                                 </template>
                                             </slide-x-right-transition>
                                         </div>
@@ -46,17 +48,18 @@
                                 <template v-else>
                                     <div class="row">
                                         <div class="col-6" style="padding-left: 3rem;">
-                                            <h3 class="text-primary text-uppercase" style="font-size: 1.8rem;">{{ cardName(x.toString()) }}</h3>
+                                            <h3 class="text-primary text-uppercase" style="font-size: 1.8rem; color: #1A1A1D!important;">{{ cardName(x.toString()) }}</h3>
                                         </div>
                                         <div class="col-6 justify-content-md-center text-center">
-                                            <base-button type="primary" icon="fa fa-microphone" @click="startRecorder(card, x.toString())"></base-button>
+                                            <base-button type="primary" icon="fa fa-microphone" @click="startRecorder(card, x.toString())" class="bg-gradient-primary"></base-button>
                                         </div>
                                     </div>
                                 </template>
                             </card>
                         </tab-pane>
                     </card>
-            </tabs>
+                    </perfect-scrollbar>
+                </tabs>
             </div>
             <modal :show.sync="showRecorder"
                    body-classes="p-3"
@@ -111,6 +114,33 @@ export default {
         cardName(cardNumber) {
             if (cardNumber === '1') {
                 return 'Ace'
+            }
+            else if (cardNumber === '2') {
+                return 'Two'
+            }
+            else if (cardNumber === '3') {
+                return 'Three'
+            }
+            else if (cardNumber === '4') {
+                return 'Four'
+            }
+            else if (cardNumber === '5') {
+                return 'Five'
+            }
+            else if (cardNumber === '6') {
+                return 'Six'
+            }
+            else if (cardNumber === '7') {
+                return 'Seven'
+            }
+            else if (cardNumber === '8') {
+                return 'Eight'
+            }
+            else if (cardNumber === '9') {
+                return 'Nine'
+            }
+            else if (cardNumber === '10') {
+                return 'Ten'
             }
             else if (cardNumber === '11') {
                 return 'Jack'
@@ -175,9 +205,25 @@ export default {
     .tab-content .card .card-body {
         padding: 0px!important;
     }
+    .tab-content {
+        height: 100%!important;
+    }
     .modal-content {
         background-color: rgba(0,0,0,0)!important;
         box-shadow: none!important;;
         -webkit-box-shadow: none!important;
+    }
+    .nav-item .active {
+        background: linear-gradient(87deg, #A33327 0, #a36727 100%) !important;
+        background-image: linear-gradient(87deg, rgb(163, 51, 39) 0px, rgb(163, 103, 39) 100%) !important;
+        background-position-x: initial !important;
+        background-position-y: initial !important;
+        background-size: initial !important;
+        background-repeat-x: initial !important;
+        background-repeat-y: initial !important;
+        background-attachment: initial !important;
+        background-origin: initial !important;
+        background-clip: initial !important;
+        background-color: initial !important;
     }
 </style>

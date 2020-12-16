@@ -10,19 +10,11 @@ import Contact from "./views/Contact.vue";
 import Perform from "./views/Perform.vue";
 import Starter from "./views/Starter.vue";
 import store from "./store";
+import StarterFooter2 from "./layout/starter/StarterFooter2";
 Vue.use(Router);
 
 const router = new Router({
   routes: [
-    // {
-    //   path: "/",
-    //   name: "auth-check-redirect",
-    //   components: {
-    //     // header: Header,
-    //     default: Starter,
-    //     footer: Footer
-    //   }
-    // },
     {
       path: "/",
       name: "home",
@@ -30,7 +22,10 @@ const router = new Router({
         // header: Header,
         default: Home,
         footer: Footer
-      }
+      },
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: "/register-device",
@@ -38,8 +33,11 @@ const router = new Router({
       components: {
         // header: Header,
         default: RegisterDevice,
-        footer: Footer
-      }
+        footer: StarterFooter2
+      },
+      meta: {
+        requiresAuth: false,
+      },
     },
     {
       path: "/set-up",
@@ -48,16 +46,20 @@ const router = new Router({
         header: Header,
         default: SetUp,
         footer: Footer
-      }
+      },
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: "/perform",
       name: "perform",
       components: {
-        // header: Header,
         default: Perform,
-        // footer: Footer
-      }
+      },
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: "/tutorial",
@@ -66,7 +68,10 @@ const router = new Router({
         header: Header,
         default: Tutorial,
         footer: Footer
-      }
+      },
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: "/contact",
@@ -75,15 +80,26 @@ const router = new Router({
         header: Header,
         default: Contact,
         footer: Footer
-      }
+      },
+      meta: {
+        requiresAuth: false,
+      },
     }
   ]
 });
 
-const waitForStorageToBeReady = async (to, from, next) => {
+const middlewares = async (to, from, next) => {
   await store.restored
-  next()
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.state.user.accessCode !== '') {
+      next()
+    } else {
+      next('/register-device')
+    }
+  } else {
+    next()
+  }
 }
-router.beforeEach(waitForStorageToBeReady)
+router.beforeEach(middlewares)
 
 export default router

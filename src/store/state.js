@@ -1,7 +1,7 @@
 const state = {
     user: {
         email: "",
-        accessCode: "ff",
+        accessCode: "",
         name: "",
     },
     authenticated: false,

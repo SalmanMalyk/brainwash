@@ -1,39 +1,29 @@
 <template>
     <div>
-        <section class="section section section-shaped my-0 overflow-hidden">
-            <div class="shape shape-style-1 bg-gradient-success shape-skew">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+        <section class="section section my-0 overflow-hidden">
             <div class="container py-0" style="margin-bottom: 6rem!important;">
                 <div class="row row-grid align-items-center">
-                    <div class="col-sm-6" style="margin-bottom: 6rem!important;">
+                    <div class="col-sm-6" style="margin-top:2rem; margin-bottom: 5rem!important;">
                         <div class="position-relative text-center pl-sm-5">
-                            <img src="img/brand/white.png" style="width: 200px;" class="img-fluid floating">
+                            <img src="img/brand/brainwash.png" style="width: 200px;" class="img-fluid floating">
                         </div>
                     </div>
                     <div class="col-sm-6" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
                         <router-link to="/set-up" title="Set-Up Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">SET-UP</base-button>
+                            <base-button style="min-width: 13rem!important;" size="lg" type="primary" outline>SET-UP</base-button>
                         </router-link>
                     </div>
                     <div class="col-sm-6" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
-                        <router-link to="/perform" title="Perform Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">PERFORM</base-button>
-                        </router-link>
+                        <base-button style="min-width: 13rem!important;" size="lg" type="primary" outline @click="perform">PERFORM</base-button>
                     </div>
                     <div class="col-sm-6" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
                         <router-link to="/tutorial" title="Tutorial Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">TUTORIAL</base-button>
+                            <base-button style="min-width: 13rem!important;" size="lg" type="primary" outline>TUTORIAL</base-button>
                         </router-link>
                     </div>
                     <div class="col-sm-6" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
                         <router-link to="/contact" title="Contact Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">CONTACT</base-button>
+                            <base-button style="min-width: 13rem!important;" size="lg" type="primary" outline>CONTACT</base-button>
                         </router-link>
                     </div>
                 </div>
@@ -45,6 +35,27 @@
 <script>
 export default {
   name: "home",
-  components: {}
+  components: {},
+    methods: {
+      perform () {
+          const isEmptyHearts = Object.values(this.$store.state.voiceData.hearts).some(x => (x === null || x === ''));
+          const isEmptyClubs = Object.values(this.$store.state.voiceData.clubs).some(x => (x === null || x === ''));
+          const isEmptySpades = Object.values(this.$store.state.voiceData.spades).some(x => (x === null || x === ''));
+          const isEmptyDiamonds = Object.values(this.$store.state.voiceData.diamonds).some(x => (x === null || x === ''));
+          if (isEmptyHearts || isEmptyClubs || isEmptyDiamonds || isEmptySpades) {
+              this.$swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Please complete the set-up first!',
+                  timer: 2500,
+                  timerProgressBar: true,
+              })
+          } else {
+              this.$router.push({
+                  path: '/perform'
+              })
+          }
+      },
+    },
 };
 </script>

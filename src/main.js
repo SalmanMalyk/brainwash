@@ -24,9 +24,16 @@ import './registerServiceWorker'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 import AudioRecorder from './components/vue-audio-recorder'
 import VueSweetalert2 from 'vue-sweetalert2';
+import Particles from "particles.vue";
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
+import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
+import Vuelidate from 'vuelidate'
 
+Vue.use(Vuelidate);
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+Vue.use(PerfectScrollbar)
+Vue.use(Particles);
 Vue.use(VueSweetalert2)
 Vue.use(AudioRecorder)
 Vue.use(VueYouTubeEmbed, { global: true, componentId: "youtube-media" })

@@ -4,7 +4,7 @@
             <div class="container ct-example-row" style="width: 100%!important;">
                 <div class="alignleft">
                     <router-link class="navbar-brand mr-xs-5" to="/">
-                        <img src="img/brand/white.png">
+                        <img src="img/brand/brainwash.png" style="width: 100px;height: auto"/>
                     </router-link>
                 </div>
                 <div class="alignright" style="text-align: right;">
