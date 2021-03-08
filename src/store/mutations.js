@@ -5,6 +5,12 @@ const mutations = {
     setUser (state, data) {
         state.user = data
     },
+    setFakeScreen (state, data) {
+        state.fakeScreen = data
+    },
+    setMarginTop (state, data) {
+        state.marginTop = data
+    },
 }
 
 export default mutations

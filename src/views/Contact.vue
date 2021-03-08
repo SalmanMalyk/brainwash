@@ -3,11 +3,11 @@
         <section class="section section section-shaped my-0 overflow-hidden">
             <div class="container py-0" style="margin-bottom: 4.5rem!important;">
                 <div class="row row-grid align-items-center">
-                    <div class="col-sm-6" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important; padding-top: 1.3rem;">
+                    <div class="col-12" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important; padding-top: 1.3rem;">
                         <h2 class="display-3 text-white">Contact</h2>
                         <p class="lead text-white" style="padding: 0px 10px 10px 10px;">We are here to help you!</p>
                     </div>
-                    <div class="col-sm-6" style="text-align: center!important; margin-top:0px!important;">
+                    <div class="col-12" style="text-align: center!important; margin-top:0px!important;">
                         <card shadow class="shadow-lg--hover mt-2">
                             <div class="d-flex px-3">
                                 <div>

@@ -1,13 +1,13 @@
 <template>
-    <div id="app">
+    <div id="app" class="not-selectable">
         <Particles
                 id="brainwash-bg"
                 style="position: absolute; top:0px; bottom:0px; width: 100%; z-index: -1; background-color: #000;"
                 :options="backgroundOptions"
         />
-        <base-alert type="info" dismissible class="text-center" style="position: absolute; top:0px; width: 100%; z-index: 9;margin: 0px!important; border-radius: 0px!important;" v-if="updateExists" @click="refreshApp">
+        <base-alert type="info" dismissible class="text-center" style="position: absolute; top:0px; width: 100%; z-index: 999;margin: 0px!important; border-radius: 0px!important;" v-if="updateExists" @click="refreshApp">
             <span class="alert-inner--text" style="margin-right: 1rem;"><strong>New version available!</strong></span>
-            <base-button type="secondary" outline size="sm" @click="refreshApp">Update</base-button>
+            <base-button type="secondary" outline size="sm" @click="refreshApp" style="z-index: 35;">Update</base-button>
         </base-alert>
         <router-view name="header"></router-view>
         <main>
@@ -247,7 +247,22 @@ export default {
 };
 </script>
 <style>
+  .not-selectable{
+    -webkit-user-select: none!important;  /* Chrome all / Safari all */
+    -moz-user-select: none!important;     /* Firefox all */
+    -ms-user-select: none!important;      /* IE 10+ */
+    user-select: none!important;          /* Likely future */
+  }
+    .rate {
+        display: none!important;
+    }
     .close {
         margin: 10px 10px 0px 0px;
+    }
+    body, #app {
+        overscroll-behavior: none
+    }
+    .alert-info {
+        background-color: rgba(55,213,242,0.92) !important;
     }
 </style>

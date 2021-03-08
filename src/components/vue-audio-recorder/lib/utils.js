@@ -18,5 +18,6 @@ export function calculateLineHeadPosition (ev, element) {
 }
 
 export function convertTimeMMSS (seconds) {
+  seconds = seconds === Infinity ? 0 : seconds
   return new Date(seconds * 1000).toISOString().substr(14, 5)
 }

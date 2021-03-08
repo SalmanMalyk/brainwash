@@ -3,9 +3,9 @@
     width: auto;
     max-width: 500px;
     font-family: 'Roboto', sans-serif;
-    border-radius: 16px;
-    background-color: #FAFAFA;
-    box-shadow: 0 4px 18px 0 rgba(0,0,0,0.17);
+    /*border-radius: 16px;*/
+    /*background-color: #FAFAFA;*/
+    /*box-shadow: 0 4px 18px 0 rgba(0,0,0,0.17);*/
     position: relative;
     box-sizing: content-box;
 
@@ -46,21 +46,25 @@
     &-recorder {
       position: relative;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
 
       &__duration {
+        /*position: absolute;
+        top: -1.1rem;
+        right: -0rem;*/
         color: #AEAEAE;
         font-size: 32px;
         font-weight: 500;
-        margin-top: 20px;
-        margin-bottom: 16px;
+        margin-right: 0.5rem;
+        /*margin-top: 20px;*/
+        /*margin-bottom: 16px;*/
       }
 
       &__stop {
-        position: absolute;
+        /*position: absolute;
         top: 10px;
-        right: -52px;
+        right: -52px;*/
       }
 
       &__time-limit {
@@ -206,6 +210,7 @@
     <div class="ar-content" :class="{'ar__blur': isUploading}">
       <div class="ar-recorder">
         <icon-button
+          v-if="!isRecording"
           class="ar-icon ar-icon__lg"
           :name="iconButtonType"
           :class="{
@@ -213,48 +218,51 @@
             'ar-icon--pulse': isRecording && volume > 0.02
           }"
           @click.native="toggleRecorder"/>
-        <icon-button
-          class="ar-icon ar-icon__sm ar-recorder__stop"
-          name="stop"
-          @click.native="stopRecorder"/>
+        <template v-else>
+          <div class="ar-recorder__duration">{{recordedTime}}</div>
+          <icon-button
+                  class="ar-icon ar-icon__lg ar-recorder__stop"
+                  name="stop"
+                  @click.native="stopRecorder"/>
+        </template>
       </div>
 
-<!--      <div class="ar-recorder__records-limit" v-if="attempts">Attempts: {{attemptsLeft}}/{{attempts}}</div>-->
-      <div class="ar-recorder__duration">{{recordedTime}}</div>
-      <div class="ar-recorder__time-limit" v-if="time">Record duration is limited: {{ Math.floor((time * 60)) }}&nbsp;seconds</div>
-      <div class="ar-recorder__record-name">Recording for: {{ fileName }}</div>
-      <div class="ar-recorder__alert">Click on save button after recording.</div>
+<!--&lt;!&ndash;      <div class="ar-recorder__records-limit" v-if="attempts">Attempts: {{attemptsLeft}}/{{attempts}}</div>&ndash;&gt;-->
 
-      <div class="ar-records">
-        <div
-          class="ar-records__record"
-          :class="{'ar-records__record--selected': record.id === selected.id}"
-          :key="record.id"
-          v-for="(record, idx) in recordList"
-          @click="choiceRecord(record)">
-            <div
-              class="ar__rm"
-              v-if="record.id === selected.id"
-              @click="removeRecord(idx)">&times;</div>
-            <div class="ar__text">Record {{idx + 1}}</div>
-            <div class="ar__text">{{record.duration}}</div>
+<!--      <div class="ar-recorder__time-limit" v-if="time">Record duration is limited: {{ Math.floor((time * 60)) }}&nbsp;seconds</div>-->
+<!--      <div class="ar-recorder__record-name">Recording for: {{ fileName }}</div>-->
+<!--      <div class="ar-recorder__alert">Click on save button after recording.</div>-->
 
-            <downloader
-              v-if="record.id === selected.id && showDownloadButton"
-              class="ar__downloader"
-              :record="record"
-              :filename="filename"/>
+<!--      <div class="ar-records">-->
+<!--        <div-->
+<!--          class="ar-records__record"-->
+<!--          :class="{'ar-records__record&#45;&#45;selected': record.id === selected.id}"-->
+<!--          :key="record.id"-->
+<!--          v-for="(record, idx) in recordList"-->
+<!--          @click="choiceRecord(record)">-->
+<!--            <div-->
+<!--              class="ar__rm"-->
+<!--              v-if="record.id === selected.id"-->
+<!--              @click="removeRecord(idx)">&times;</div>-->
+<!--            <div class="ar__text">Record {{idx + 1}}</div>-->
+<!--            <div class="ar__text">{{record.duration}}</div>-->
 
-            <uploader
-              v-if="record.id === selected.id && showUploadButton"
-              class="ar__uploader"
-              :record="record"
-              :filename="filename"
-              :headers="headers"
-              :upload-url="uploadUrl"/>
-        </div>
-      </div>
-      <audio-player :record="selected"/>
+<!--&lt;!&ndash;            <downloader&ndash;&gt;-->
+<!--&lt;!&ndash;              v-if="record.id === selected.id && showDownloadButton"&ndash;&gt;-->
+<!--&lt;!&ndash;              class="ar__downloader"&ndash;&gt;-->
+<!--&lt;!&ndash;              :record="record"&ndash;&gt;-->
+<!--&lt;!&ndash;              :filename="filename"/>&ndash;&gt;-->
+
+<!--            <uploader-->
+<!--              v-if="record.id === selected.id && showUploadButton"-->
+<!--              class="ar__uploader"-->
+<!--              :record="record"-->
+<!--              :filename="filename"-->
+<!--              :headers="headers"-->
+<!--              :upload-url="uploadUrl"/>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <audio-player :record="selected"/>-->
     </div>
   </div>
 </template>
@@ -324,10 +332,23 @@
       this.stopRecorder()
     },
     methods: {
-      afterRecording (data) {
+      async afterRecording (data) {
         data.cardType = this.cardType
         data.cardNumber = this.cardNumber
         this.selected = data
+        const reader = new FileReader();
+        let convertedBlobString = ''
+        reader.readAsDataURL(this.selected.blob);
+        const vm = this;
+        reader.onloadend = await function() {
+          convertedBlobString = reader.result;
+          const saveData = {
+            cardType: vm.cardType,
+            cardNumber: vm.cardNumber,
+            recordData: convertedBlobString
+          }
+          vm.$store.commit('setRecord', saveData)
+        }
       },
       toggleRecorder () {
         if (this.attempts && this.recorder.records.length >= this.attempts) {
@@ -386,7 +407,7 @@
         if (this.time && this.recorder.duration >= this.time * 60) {
           this.stopRecorder()
         }
-        return convertTimeMMSS(this.recorder.duration)
+        return convertTimeMMSS(this.time * 60 - this.recorder.duration)
       },
       volume () {
         return parseFloat(this.recorder.volume)

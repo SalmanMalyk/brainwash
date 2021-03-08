@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "brainwash-3807e"
+  },
+  "targets": {
+    "brainwash-3807e": {
+      "hosting": {
+        "main": [
+          "brainwash-3807e"
+        ],
+        "new": [
+          "brainwash"
+        ]
+      }
+    }
   }
 }

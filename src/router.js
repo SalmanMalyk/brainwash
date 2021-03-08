@@ -1,16 +1,21 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Header from "./layout/starter/StarterHeader";
+import Header2 from "./layout/starter/StarterHeader2";
 import Footer from "./layout/starter/StarterFooter";
 import RegisterDevice from "./views/Register.vue";
 import Home from "./views/Home.vue";
-import SetUp from "./views/SetUp.vue";
+
 import Tutorial from "./views/Tutorial.vue";
 import Contact from "./views/Contact.vue";
 import Perform from "./views/Perform.vue";
 import Starter from "./views/Starter.vue";
 import store from "./store";
 import StarterFooter2 from "./layout/starter/StarterFooter2";
+import FakeScreen from "./views/FakeScreen";
+import SetUpVoice from "./views/SetUpVoice";
+import SetUp from "./views/SetUp";
+import SetUpPlayer from "./views/SetUpPlayer";
 Vue.use(Router);
 
 const router = new Router({
@@ -52,6 +57,41 @@ const router = new Router({
       },
     },
     {
+      path: "/set-up/voice",
+      name: "voice-set-up",
+      components: {
+        header: Header,
+        default: SetUpVoice,
+        footer: Footer
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/set-up/fake-screen",
+      name: "fake-screen-set-up",
+      components: {
+        header: Header,
+        default: FakeScreen,
+        footer: Footer
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/set-up/audio-player",
+      name: "audio-player-set-up",
+      components: {
+        header: Header2,
+        default: SetUpPlayer,
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
       path: "/perform",
       name: "perform",
       components: {
@@ -84,14 +124,14 @@ const router = new Router({
       meta: {
         requiresAuth: false,
       },
-    }
+    },
   ]
 });
 
 const middlewares = async (to, from, next) => {
   await store.restored
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.state.user.accessCode !== '') {
+    if (store.state.user !== null && store.state.user.accessCode !== '') {
       next()
     } else {
       next('/register-device')

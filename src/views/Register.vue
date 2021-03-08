@@ -34,15 +34,26 @@
 <!--                            </div>-->
                             <form role="form" @submit.prevent="submit">
                                 <base-input alternative
-                                            placeholder="Name"
+                                            placeholder="First Name"
                                             style="margin-bottom: 0px!important;"
-                                            v-model.trim="name"
+                                            v-model.trim="firstName"
                                             @input="setName($event.target.value)"
                                             addon-left-icon="ni ni-hat-3"
-                                            :valid="$v.name.minLength && $v.name.required">
+                                            :valid="$v.firstName.minLength && $v.firstName.required">
                                 </base-input>
-                                <span class="text-warning" v-if="!$v.name.required && this.name !== null">Name is required</span>
-                                <span class="text-warning" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</span>
+                                <span class="text-warning" v-if="!$v.firstName.required && this.firstName !== null">First Name is required</span>
+                                <span class="text-warning" v-if="!$v.firstName.minLength">Name must have at least {{$v.firstName.$params.minLength.min}} letters.</span>
+                                <base-input alternative
+                                            class="mt-3"
+                                            placeholder="Last Name"
+                                            style="margin-bottom: 0px!important;"
+                                            v-model.trim="lastName"
+                                            @input="setName($event.target.value)"
+                                            addon-left-icon="ni ni-hat-3"
+                                            :valid="$v.lastName.minLength && $v.lastName.required">
+                                </base-input>
+                                <span class="text-warning" v-if="!$v.lastName.required && this.lastName !== null">Last Name is required</span>
+                                <span class="text-warning" v-if="!$v.lastName.minLength">Name must have at least {{$v.lastName.$params.minLength.min}} letters.</span>
                                 <base-input alternative
                                             class="mt-3"
                                             placeholder="Email"
@@ -66,9 +77,9 @@
                                 </base-input>
                                 <span class="text-warning" v-if="!$v.accessCode.required && this.accessCode !== null">Access Code is required</span>
                                 <span class="text-warning" v-if="!$v.accessCode.minLength">Access Code must have at least {{$v.name.$params.minLength.min}} letters.</span>
-                                <div class="text-muted font-italic">
+                                <div class="text-muted font-italic" v-if="accessError">
                                     <small>Access Code:
-                                        <span class="text-warning font-weight-700">claimed</span>
+                                        <span class="text-warning font-weight-700">claimed/invalid</span>
                                     </small>
                                 </div>
 <!--                                <base-checkbox>-->
@@ -90,20 +101,28 @@
 </template>
 <script>
 import { required, minLength, email } from 'vuelidate/lib/validators'
+import Bowser from "bowser";
+import * as du from 'device-uuid'
 export default {
     name: "set-up",
     data: function() {
         return {
-            name: null,
+            firstName: null,
+            lastName: null,
             email: null,
             accessCode: null,
             submitStatus: null,
+            accessError: false,
         };
     },
     computed: {
     },
     validations: {
-        name: {
+        lastName: {
+            required,
+            minLength: minLength(3)
+        },
+        firstName: {
             required,
             minLength: minLength(3)
         },
@@ -117,9 +136,13 @@ export default {
         }
     },
     methods: {
-        setName(value) {
-            this.name = value
-            this.$v.name.$touch()
+        setFirstName(value) {
+            this.firstName = value
+            this.$v.firstName.$touch()
+        },
+        setLastName(value) {
+            this.lastName = value
+            this.$v.lastName.$touch()
         },
         setEmail(value) {
             this.email = value
@@ -129,28 +152,132 @@ export default {
             this.accessCode = value
             this.$v.accessCode.$touch()
         },
-        submit() {
+        resetForm () {
+          this.firstName = null
+          this.lastName = null
+          this.email = null
+          this.accessCode = null
+        },
+        submit () {
             this.$v.$touch()
             if (this.$v.$invalid) {
                 this.submitStatus = 'ERROR'
             } else {
+                const browser = Bowser.getParser(window.navigator.userAgent);
+                let osName = browser.getOS().name.toLowerCase()
+                if (osName !== 'android' && osName !== 'ios') {
+                    if (osName === 'macos' || osName === 'ipados') {
+                        osName = 'ios'
+                    }
+                    else {
+                        osName = 'android'
+                    }
+                }
                 this.submitStatus = 'PENDING'
-                //
-                // Check Access Code Here
-                //
-                this.$store.commit('setUser', {
-                    name: this.name, email: this.email, accessCode: this.accessCode
-                })
-                let vm = this
-                setTimeout(() => {
-                    this.$router.push({
-                        path: '/'
+                this.accessCode = this.accessCode.toString()
+                this.$http.post('https://us-central1-brainwash-johannes.cloudfunctions.net/register-checkCode', {
+                    "accessCode": this.accessCode,
+                }, {
+                    headers: {
+                        'platform': osName
+                    }
+                }).then((response) => {
+                    if (response.data.valid) {
+                        this.registerUser()
+                    } else {
+                        this.$swal({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            icon: 'error',
+                            title: 'Invalid Access Code!',
+                        })
+                    }
+                }).catch((err) => {
+                    this.$swal({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        icon: 'error',
+                        title: 'Invalid Access Code!',
                     })
-                }, 1500)
-
-                this.submitStatus = 'OK'
+                    this.accessError = true
+                    this.resetForm()
+                })
             }
         },
+        registerUser () {
+            const browser = Bowser.getParser(window.navigator.userAgent);
+            let osName = browser.getOS().name.toLowerCase()
+            if (osName !== 'android' && osName !== 'ios') {
+                if (osName === 'macos' || osName === 'ipados') {
+                    osName = 'ios'
+                }
+                else {
+                    osName = 'android'
+                }
+            }
+            const vm = this
+            const uuid = new du.DeviceUUID().get();
+            const userData = {
+                firstName: vm.firstName,
+                lastName: vm.lastName,
+                email: vm.email,
+                accessCode: vm.accessCode,
+                platform: osName,
+                deviceId: uuid
+            }
+            this.$http.post('https://us-central1-brainwash-johannes.cloudfunctions.net/register-registerUser', {...userData}, {
+                headers: {
+                    'platform': osName
+                }
+            }).then((response) => {
+                if (response.data.status === "User Registration Successful !!") {
+                    vm.$store.commit('setUser', {
+                        ...userData
+                    })
+                    this.$swal({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000,
+                        icon: 'success',
+                        title: 'Registered!',
+                    })
+                    setTimeout(() => {
+                        vm.$router.push({
+                            path: '/'
+                        })
+                    }, 1500)
+
+                    vm.submitStatus = 'OK'
+                }
+                else {
+                    this.$swal({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1400,
+                        icon: 'error',
+                        title: 'Registration Error!',
+                    })
+                    this.resetForm()
+                }
+            }).catch((err) => {
+                this.$swal({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1400,
+                    icon: 'error',
+                    title: 'Registration Error!',
+                })
+                this.accessError = true
+                this.resetForm()
+            })
+        }
     },
 };
 </script>

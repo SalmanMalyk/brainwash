@@ -28,10 +28,23 @@ import Particles from "particles.vue";
 import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
 import Vuelidate from 'vuelidate'
+import FileSelector from 'vue-file-selector';
 
-Vue.use(Vuelidate);
 import 'sweetalert2/dist/sweetalert2.min.css';
-
+import Vue2TouchEvents from 'vue2-touch-events'
+import VueRecord from './components/vue-record-master/src/components/index'
+// import VueRecord from '@codekraft-studio/vue-record'
+import AudioRecorder2 from 'audio-recorder-polyfill'
+if (!window.MediaRecorder) {
+  window.MediaRecorder = AudioRecorder2
+}
+// window.MediaRecorder = AudioRecorder2
+Vue.use(VueRecord)
+Vue.use(FileSelector);
+Vue.use(Vue2TouchEvents, {
+  touchHoldTolerance: 130,
+})
+Vue.use(Vuelidate);
 Vue.use(PerfectScrollbar)
 Vue.use(Particles);
 Vue.use(VueSweetalert2)
