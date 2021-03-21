@@ -1,35 +1,57 @@
 <template>
   <div class="vueAudioBetter" :style="{width: totalWidth}">
-    <div class="total" style="width: 100%!important;">
-      <span style="font-weight: 700; font-size: 1.5rem;text-align: left!important;">{{ fileName }}</span>
-<!--      <span style="font-weight: 500; font-size: 0.9rem; padding-top: 0.47rem;">{{ _sToMs(seek) }} / {{ _sToMs(duration) }}</span>-->
-    </div>
+      <div class="row align-middle" style="width: 80%!important; text-align: center!important; position: relative; margin: 22px auto;">
+        <div class="col-3 align-middle" style="text-align: left; padding: 0px!important;">
+          <img style="height: 3.8rem; border-radius: 0.5rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/album_art.png')"/>
+        </div>
+        <div class="col-5 align-middle" style="padding-left: 4.5px; padding-top: 0.2rem; line-height: 1.0rem; text-align: left; padding: 0px!important; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;">
+          <span style="font-size: 13px; font-weight: bold;">iPhone</span><br/>
+          <span style="line-height: 1.6rem; color: #1F2020; font-weight: bold; font-size: 16px;">{{ fileName }}</span><br/>
+          <span style="color: #1F2020; font-size: 13px;">Brainwash</span>
+        </div>
+        <div class="col-4 align-middle" style="text-align: right; padding: 0px!important;">
+          <span>
+            <img style="margin-top: 1rem!important; height: 1.4rem;" :src="require('../../../assets/AirPlay.png')"/>
+          </span>
+        </div>
+      </div>
     <div class="slider" ref="slider" @click="handleModifyProgress">
       <div class="progressInfo"></div>
       <div class="process" :style="{width: pWidth}"></div>
       <div class="thunk" ref="trunk" :style="{left}">
         <div class="block"></div>
       </div>
-      <span style="font-weight: 500; font-size: 0.7rem; padding-top: 0.5rem; margin-top: 5px; margin-left:-15px; position: absolute; left: 0px;">{{ _sToMs(seek) }}</span>
-      <span style="font-weight: 500; font-size: 0.75rem; padding-top: 0.5rem; margin-top: 5px; margin-right:-15px; position: absolute; right: 0px;">{{ _sToMs(duration) }}</span>
+      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.5rem; margin-top: 5px; position: absolute; left: 0px; color: #1F2020;">{{ _sToMs(seek) }}</span>
+      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.5rem; margin-top: 5px; position: absolute; right: 0px; color: #1F2020;">- {{ _sToMs(duration) }}</span>
     </div>
-    <div class="operatorButton">
-      <span class="iconfont icon-notificationfill" @click="handleToggleMute" v-if="isMute"></span>
-      <span class="iconfont icon-notificationforbidfill" @click="handleToggleMute" v-else></span>
-      <span class="iconfont icon-playcircle-fill" @click="togglePlayback" v-if="!playing"></span>
-      <span class="iconfont icon-pausecircle-fill" @click="togglePlayback" v-else></span>
-      <span class="iconfont icon-stopcircle-fill" @click="stop"></span>
+    <div class="operatorButton" style="margin-top: 2.7rem; margin-bottom: 1.8rem;">
+      <span class="iconfont">
+        <img style="height: 1.3rem;" :src="require('../../../assets/Rewind.png')"/>
+      </span>
+      <span class="iconfont" @click="togglePlayback" v-if="!playing">
+        <img style="height: 2.2rem;" :src="require('../../../assets/Play.png')"/>
+      </span>
+      <span class="iconfont" @click="togglePlayback" v-else>
+        <img style="height: 2.2rem;" :src="require('../../../assets/Pause.png')"/>
+      </span>
+      <span class="iconfont">
+        <img style="height: 1.3rem;" :src="require('../../../assets/FastForward.png')"/>
+      </span>
     </div>
     <div class="align-items-center" style="width: 80%!important; text-align: center!important; position: relative; margin: 22px auto;">
-      <div class="row">
-        <div class="col-2">
-          <span style="line-height: 1.4!important;" class="iconfont icon-subtract_fill" @click="handleSetVolume(false)"></span>
+      <div class="row" style="padding: 0px 10px;">
+        <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
+          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetVolume(false)">
+            <img style="height: 1rem;" :src="require('../../../assets/AudioDec.png')"/>
+          </span>
         </div>
-        <div class="col-8" style="padding: 0px!important;">
+        <div class="col-10" style="padding: 0px 15px!important;">
           <vue-slider v-model="curVolume" :min="0" :max="1" :interval="0.1" style="height: 5.5px!important;" v-bind="options" />
         </div>
-        <div class="col-2">
-          <span style="line-height: 1.4!important;" class="iconfont icon-roundaddfill" @click="handleSetVolume(true)"></span>
+        <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
+          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetVolume(true)">
+            <img style="height: 1rem;" :src="require('../../../assets/AudioInc.png')"/>
+          </span>
         </div>
       </div>
     </div>
@@ -200,23 +222,34 @@ export default {
 </script>
 <style>
   .vue-slider-dot-handle {
-    border: 2px solid #535150!important;
+    border: 0px !important;
+    font-size: 45px!important;
+    width: 140%;
+    height: 140%;
+    margin-top: -20%;
   }
   .vue-slider:hover .vue-slider-process, .vue-slider-process {
-    background-color: #535150!important;
+    background-color: #1F2020!important;
   }
   .vue-slider-rail {
-    background-color: #F9F6EF!important;
+    height: 3.5px!important;
+    background-color: rgba(37,40,42,0.35)!important;
   }
 </style>
 <style scoped>
 .vueAudioBetter {
+  background: rgba( 208, 208, 208, 0.70 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 9.0px );
+  -webkit-backdrop-filter: blur( 9.0px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
   overflow: hidden;
   width: 500px;
   margin: 0 auto;
-  background-color: rgba(235,235,277, 0.9);
-  border-radius: 6.5px;
-  box-shadow: 5px 5px 10px -4px #63645e;
+  /*background-color: rgba(235,235,277, 0.9);*/
+  /*border-radius: 6.5px;*/
+  /*box-shadow: 5px 5px 10px -4px #63645e;*/
   /*background-image: linear-gradient(to right, #9ca5f5, #7ff5ae);*/
 }
 .vueAudioBetter .total {
@@ -246,18 +279,18 @@ export default {
   color: #4a3535;
   font-size: 28px;
 }
-.operatorButton span:hover {
-  font-size: 30px;
-}
-.operatorButton span:last-child:hover {
-  font-size: 36px;
-}
+/*.operatorButton span:hover {*/
+/*  font-size: 30px;*/
+/*}*/
+/*.operatorButton span:last-child:hover {*/
+/*  font-size: 36px;*/
+/*}*/
 .vueAudioBetter .slider {
   position: relative;
   margin: 18px auto 28px auto;
   width: 80%;
-  height: 6.5px;
-  background: #F9F6EF;
+  height: 4.5px;
+  background: #535150;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -266,11 +299,12 @@ export default {
   left: 0;
   top: 0;
   width: 112px;
-  height: 6.5px;
+  height: 4.5px;
   border-radius: 5px;
-  background: #535150;
+  background: #1F2020;
 }
 .slider .thunk {
+  display: none;
   position: absolute;
   left: 100px;
   top: -5px;
@@ -284,10 +318,6 @@ export default {
   border: 2px solid #535150;
   background: rgba(255, 255, 255, 1);
   transition: 0.2s all;
-}
-.slider .block:hover {
-  transform: scale(1.1);
-  opacity: 0.6;
 }
 .slider .progressInfo {
   position: absolute;

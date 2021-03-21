@@ -8,8 +8,11 @@ const mutations = {
     setFakeScreen (state, data) {
         state.fakeScreen = data
     },
-    setMarginTop (state, data) {
-        state.marginTop = data
+    setTop (state, data) {
+        state.top = data
+    },
+    setLeft (state, data) {
+        state.left = data
     },
 }
 

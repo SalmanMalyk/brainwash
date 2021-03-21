@@ -7842,6 +7842,11 @@ schema-utils@^2.6.5:
     ajv "^6.12.4"
     ajv-keywords "^3.5.2"
 
+screen-orientation-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/screen-orientation-js/-/screen-orientation-js-1.0.2.tgz#5120879b0cc964ae5fccf8f2be6b65c550c364af"
+  integrity sha512-F9YXfGmA60UG1qLSYrZvgFPTUddjcr3m9Fpp/yi26/D3UghmJsujZsfBDMwBpzc2i5hg3i19gi4KCrXasZbq5g==
+
 scss-tokenizer@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/scss-tokenizer/-/scss-tokenizer-0.2.3.tgz#8eb06db9a9723333824d3f5530641149847ce5d1"
@@ -8104,6 +8109,11 @@ sort-keys@^1.0.0:
   integrity sha1-RBttTTRnmPG05J6JIK37oOVD+a0=
   dependencies:
     is-plain-obj "^1.0.0"
+
+sortablejs@1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
+  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
 
 source-list-map@^2.0.0:
   version "2.0.1"
@@ -9124,6 +9134,11 @@ vue-clickaway@^2.2.2:
   dependencies:
     loose-envify "^1.2.0"
 
+vue-drag-resize@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/vue-drag-resize/-/vue-drag-resize-1.4.2.tgz#656408b52c77c383a6aafb08c32bd220f0f25b73"
+  integrity sha512-rPd8JkkueBegCX8niJg3aWwQBfys9upaxLDyH6+1Gkz6pUzldhVqpF0hragppo68q6NWqE9fbvypWVI43AFyqw==
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -9187,6 +9202,11 @@ vue-property-decorator@^9.0.2:
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
   integrity sha512-xYA8MkZynPBGd/w5QFJ2d/NM0z/YeegMqYTphy7NJQXbZcuU6FC6AOdUAcy4SXP+YnkerC6AfH+ldg7PDk9ESQ==
+
+vue-resizable@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vue-resizable/-/vue-resizable-2.0.1.tgz#6dfce74e64bce27952e12acfab76c480d279490f"
+  integrity sha512-3CueadexPK2/243Z4QDrvz1Ya+2T1V2S2MGvKVovyNf+Q0aORJAEyc0Qm63YrvSkEmb9DI5ESgwb5sZFvOhl4A==
 
 vue-router@^3.0.2:
   version "3.5.1"
@@ -9257,6 +9277,13 @@ vue@<3, vue@^2.0, vue@^2.6.10, vue@^2.6.6:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+
+vuedraggable@^2.24.3:
+  version "2.24.3"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.24.3.tgz#43c93849b746a24ce503e123d5b259c701ba0d19"
+  integrity sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==
+  dependencies:
+    sortablejs "1.10.2"
 
 vuelidate@^0.7.6:
   version "0.7.6"

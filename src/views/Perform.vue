@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-touch:swipe.bottom="swipeBottomHandler">
         <div v-if="step === 1">
             <div class="row">
                 <div class="col-6" @click="chooseCardType('hearts')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="container py-0" style="position: absolute; z-index: 2!important;">
                         <div class="row row-grid align-items-center">
-                            <div class="col-11" style="margin-top: 5rem; margin-bottom: 5rem!important;" :style="{ marginTop: this.$store.state.marginTop + 'rem!important'}">
+                          <div class="col-11" style="margin-bottom: 5rem!important; position: absolute" :style="{ top: this.$store.state.top + 'px!important',  left: this.$store.state.left + 'px!important'}">
                                 <div class="position-relative text-center">
                                     <VueAudioFake
                                             :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
@@ -63,7 +63,7 @@
                     </div>
                     <div class="container py-0" style="position: absolute; z-index: 2!important;">
                         <div class="row row-grid align-items-center">
-                            <div class="col-11" style="margin-top: 5rem; margin-bottom: 5rem!important;" :style="{ marginTop: this.$store.state.marginTop + 'rem!important'}">
+                            <div class="col-11" style="margin-bottom: 5rem!important; position: absolute" :style="{ top: this.$store.state.top + 'px!important',  left: this.$store.state.left + 'px!important'}">
                                 <div class="position-relative text-center">
                                     <vue-audio
                                             :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
@@ -109,6 +109,9 @@ export default {
         }
     },
     methods: {
+        swipeBottomHandler() {
+          this.$router.go(-1)
+        },
         updateTime() {
             let cd = new Date();
             this.time = this.zeroPadding(cd.getHours() === 0 ? 12 : cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2);

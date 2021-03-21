@@ -9,20 +9,22 @@
             </div>
             <div class="container py-0" style="position: absolute; z-index: 2!important;">
                 <div class="row row-grid align-items-center">
-                    <div class="col-11" style="margin-bottom: 5rem!important;" :style="{ marginTop: marginTop + 'rem'}" >
+                  <vue-drag-resize :isActive="false" v-on:dragging="resize">
+                    <div class="col-11" style="margin-bottom: 5rem!important; position: absolute" :style="{ top: top + 'px!important',  left: left + 'px!important'}">
                         <div class="position-relative text-center">
-                            <vue-audio
-                                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                                    :width="windowWidth * 0.9"
-                            ></vue-audio>
+                          <vue-audio
+                              :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                              :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                              :width="windowWidth * 0.9"
+                          ></vue-audio>
                         </div>
-                    </div>
+                      </div>
+                  </vue-drag-resize>
                 </div>
             </div>
             <div style="position: absolute; background: #1F2020; z-index: 99; left: 0px; bottom: 0px; width: 100%; padding: 20px; display: inline-block!important;">
-                <base-button style="" size="lg" type="white" @click="moveUp" outline>Move Up</base-button>
-                <base-button style="" size="lg" type="white" @click="moveDown" outline>Move Down</base-button>
+<!--                <base-button style="" size="lg" type="white" @click="moveUp" outline>Move Up</base-button>-->
+<!--                <base-button style="" size="lg" type="white" @click="moveDown" outline>Move Down</base-button>-->
                 <base-button style="" size="lg" type="white" @click="savePosition" outline>Save</base-button>
             </div>
         </div>
@@ -30,16 +32,20 @@
 </template>
 
 <script>
+import DraggableDiv from '../components/DraggableDiv'
 const play = require('audio-play');
 const load = require('audio-loader');
 import VueAudio from "../components/vue-audio-better/src/VueAudio";
 export default {
     name: "perform",
     components: {
+        DraggableDiv,
         VueAudio,
     },
     data() {
         return {
+            top: 0,
+            left: 0,
             time: '',
             date: '',
             week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -55,6 +61,10 @@ export default {
         }
     },
     methods: {
+        resize(newRect) {
+          this.top = newRect.top + 180;
+          this.left = newRect.left;
+        },
         updateTime() {
             let cd = new Date();
             this.time = this.zeroPadding(cd.getHours() === 0 ? 12 : cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2);
@@ -67,17 +77,10 @@ export default {
             }
             return (zero + num).slice(-digit);
         },
-        moveUp () {
-            if (this.marginTop > 0) {
-                this.marginTop--;
-            }
-        },
-        moveDown () {
-            this.marginTop++;
-        },
         savePosition () {
             let vm = this
-            this.$store.commit('setMarginTop', this.marginTop)
+            this.$store.commit('setTop', this.top)
+            this.$store.commit('setLeft', this.left)
             this.$swal({
                 toast: true,
                 position: 'top-end',
@@ -172,6 +175,8 @@ export default {
     },
 
     mounted() {
+      this.top = this.$store.state.top
+      this.left = this.$store.state.left
         let timerID = setInterval(this.updateTime, 1000);
         this.updateTime();
         this.$nextTick(() => {
@@ -194,6 +199,16 @@ export default {
 </script>
 
 <style>
+div.vdr.active {
+  height: 0px!important;
+  width: 0px!important;
+}
+.vdr-stick {
+  display: none;
+}
+.vdr::before {
+  display: none;
+}
     .clock {
         font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
         font-weight: bold;

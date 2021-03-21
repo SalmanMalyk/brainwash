@@ -128,17 +128,24 @@ const router = new Router({
   ]
 });
 
+// // prod
+// const middlewares = async (to, from, next) => {
+//   await store.restored
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (store.state.user !== null && store.state.user.accessCode !== '') {
+//       next()
+//     } else {
+//       next('/register-device')
+//     }
+//   } else {
+//     next()
+//   }
+// }
+
+// dev
 const middlewares = async (to, from, next) => {
   await store.restored
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.state.user !== null && store.state.user.accessCode !== '') {
-      next()
-    } else {
-      next('/register-device')
-    }
-  } else {
-    next()
-  }
+  next()
 }
 router.beforeEach(middlewares)
 

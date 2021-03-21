@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="copyright" style="color: #8A8A8B;">
                     &copy; {{year}}
-                    <a href="#" target="_blank" rel="noopener" style="color: #8A8A8B;">Brainwash</a>
+                    Brainwash
                 </div>
             </div>
         </div>
