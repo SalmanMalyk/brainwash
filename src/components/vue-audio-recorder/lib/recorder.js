@@ -1,4 +1,5 @@
-import Encoder from './encoder'
+import Mp3Encoder from './mp3-encoder'
+import WavEncoder from './wav-encoder'
 import { convertTimeMMSS } from './utils'
 
 export default class {
@@ -7,6 +8,12 @@ export default class {
     this.pauseRecording  = options.pauseRecording
     this.afterRecording  = options.afterRecording
     this.micFailed       = options.micFailed
+    this.format          = options.format
+
+    this.encoderOptions = {
+      bitRate    : options.bitRate,
+      sampleRate : options.sampleRate
+    }
 
     this.bufferSize = 4096
     this.records    = []
@@ -16,6 +23,8 @@ export default class {
 
     this.duration = 0
     this.volume   = 0
+
+    this.wavSamples = []
 
     this._duration = 0
   }
@@ -35,9 +44,13 @@ export default class {
              .getUserMedia(constraints)
              .then(this._micCaptured.bind(this))
              .catch(this._micError.bind(this))
-    this.isPause = false
+
+    this.isPause     = false
     this.isRecording = true
-    this.lameEncoder = new Encoder({})
+
+    if (this._isMp3() && !this.lameEncoder) {
+      this.lameEncoder = new Mp3Encoder(this.encoderOptions)
+    }
   }
 
   stop () {
@@ -46,7 +59,20 @@ export default class {
     this.processor.disconnect()
     this.context.close()
 
-    const record = this.lameEncoder.finish()
+    let record = null
+
+    if (this._isMp3()) {
+      record = this.lameEncoder.finish()
+    } else {
+      let wavEncoder = new WavEncoder({
+        bufferSize : this.bufferSize,
+        sampleRate : this.encoderOptions.sampleRate,
+        samples    : this.wavSamples
+      })
+      record = wavEncoder.finish()
+      this.wavSamples = []
+    }
+
     record.duration = convertTimeMMSS(this.duration)
     this.records.push(record)
 
@@ -55,6 +81,7 @@ export default class {
 
     this.isPause     = false
     this.isRecording = false
+
     this.afterRecording && this.afterRecording(record)
   }
 
@@ -62,7 +89,6 @@ export default class {
     this.stream.getTracks().forEach((track) => track.stop())
     this.input.disconnect()
     this.processor.disconnect()
-    this.context.close()
 
     this._duration = this.duration
     this.isPause = true
@@ -75,7 +101,7 @@ export default class {
   }
 
   lastRecord () {
-    return this.records.slice(-1)
+    return this.records.slice(-1).pop()
   }
 
   _micCaptured (stream) {
@@ -89,7 +115,11 @@ export default class {
       const sample = ev.inputBuffer.getChannelData(0)
       let sum = 0.0
 
-      this.lameEncoder.encode(sample)
+      if (this._isMp3()) {
+        this.lameEncoder.encode(sample)
+      } else {
+        this.wavSamples.push(new Float32Array(sample))
+      }
 
       for (let i = 0; i < sample.length; ++i) {
         sum += sample[i] * sample[i]
@@ -105,5 +135,9 @@ export default class {
 
   _micError (error) {
     this.micFailed && this.micFailed(error)
+  }
+
+  _isMp3 () {
+    return this.format.toLowerCase() === 'mp3'
   }
 }

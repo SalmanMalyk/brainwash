@@ -1,6 +1,6 @@
 <style lang="scss">
   .ar-player {
-    width: auto;
+    width: 300px;
     height: unset;
     border: 0;
     border-radius: 0;
@@ -17,7 +17,7 @@
       margin: 0 0 0 5px;
 
       & > .ar-player__progress {
-        width: 4rem;
+        width: 125px;
       }
     }
 
@@ -30,14 +30,14 @@
     }
 
     &-actions {
-      width: 55%;
+      width: 45%;
       display: flex;
       align-items: center;
       justify-content: space-around;
     }
 
     &__progress {
-      width: 3rem!important;
+      width: 160px;
       margin: 0 8px;
     }
 
@@ -55,7 +55,11 @@
 
       &--active {
         fill: white !important;
-        background-color: #689775 !important;
+        background-color: #05CBCD !important;
+
+        &:hover {
+          fill: #505050 !important;
+        }
       }
     }
   }
@@ -82,7 +86,7 @@
         :percentage="progress"
         @change-linehead="_onUpdateProgress"/>
       <div class="ar-player__time">{{duration}}</div>
-      <volume-control @change-volume="_onChangeVolume"/>
+<!--      <volume-control @change-volume="_onChangeVolume"/>-->
     </div>
 
     <audio :id="playerUniqId" :src="audioSource"></audio>
@@ -131,6 +135,7 @@
       this.$eventBus.$on('remove-record', () => {
         this._resetProgress()
       })
+      this.player.volume = 1
     },
     computed: {
       audioSource () {

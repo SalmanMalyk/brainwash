@@ -1,11 +1,91 @@
 <style lang="scss">
+.vue-audio-recorder {
+  position: relative;
+  background-color: #4DB6AC;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  cursor: pointer;
+  box-shadow: 0 0 0 0 rgba(232, 76, 61, 0.7);
+  &:hover {
+    background-color: #26A69A;
+  }
+  &.active {
+    background-color: #ef5350;
+    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  }
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    background-color: #fff;
+  }
+  &:after {
+    top: 30%;
+    left: 43%;
+    height: 15%;
+    width: 14%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+  }
+  &:before {
+    top: 40%;
+    left: 43%;
+    height: 15%;
+    width: 14%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+  span {
+    position: absolute;
+    top: 50%;
+    left: 36%;
+    height: 24%;
+    width: 28%;
+    overflow: hidden;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      background-color: #fff;
+    }
+    &:before {
+      bottom: 50%;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 0.125em solid #fff;
+      background: none;
+      left: 0;
+    }
+    &:after {
+      top: 50%;
+      left: 40%;
+      width: 20%;
+      height: 25%;
+    }
+  }
+}
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 10px rgba(239, 83, 80, 0.1);
+    background-color: #E53935;
+    transform: scale(0.9);
+  }
+}
+svg {
+  vertical-align: baseline!important;
+}
   .ar {
-    width: auto;
-    max-width: 500px;
+    width: 420px;
     font-family: 'Roboto', sans-serif;
-    /*border-radius: 16px;*/
-    /*background-color: #FAFAFA;*/
-    /*box-shadow: 0 4px 18px 0 rgba(0,0,0,0.17);*/
+    border-radius: 16px;
+    background-color: #FAFAFA;
+    box-shadow: 0 4px 18px 0 rgba(0,0,0,0.17);
     position: relative;
     box-sizing: content-box;
 
@@ -46,43 +126,27 @@
     &-recorder {
       position: relative;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
 
       &__duration {
-        /*position: absolute;
-        top: -1.1rem;
-        right: -0rem;*/
         color: #AEAEAE;
         font-size: 32px;
         font-weight: 500;
-        margin-right: 0.5rem;
-        /*margin-top: 20px;*/
-        /*margin-bottom: 16px;*/
+        margin-top: 20px;
+        margin-bottom: 16px;
       }
 
       &__stop {
-        /*position: absolute;
+        position: absolute;
         top: 10px;
-        right: -52px;*/
+        right: -52px;
       }
 
       &__time-limit {
         position: absolute;
         color: #AEAEAE;
         font-size: 12px;
-        top: 128px;
-      }
-
-      &__alert {
-        color: #AEAEAE;
-        font-size: 11px;
-        top: 128px;
-      }
-
-      &__record-name {
-        color: #AEAEAE;
-        font-size: 14px;
         top: 128px;
       }
 
@@ -199,39 +263,44 @@
 </style>
 
 <template>
-  <div class="ar">
-    <div class="ar__overlay" v-if="isUploading"></div>
-    <div class="ar-spinner" v-if="isUploading">
-      <div class="ar-spinner__dot"></div>
-      <div class="ar-spinner__dot"></div>
-      <div class="ar-spinner__dot"></div>
-    </div>
+  <div
+      class="vue-audio-recorder"
+      :class="{
+        'active': isRecording
+      }"
+      @click="toggleRecorder"
+  >
+    <span v-if="!isRecording"></span>
+    <i v-else style="font-size: 1.5rem; color: #fff; padding: 1.1rem" :class="{
+      'ni ni-button-pause': isRecording}"></i>
+  </div>
+<!--  <div class="ar">-->
+<!--    <div class="ar__overlay" v-if="isUploading"></div>-->
+<!--    <div class="ar-spinner" v-if="isUploading">-->
+<!--      <div class="ar-spinner__dot"></div>-->
+<!--      <div class="ar-spinner__dot"></div>-->
+<!--      <div class="ar-spinner__dot"></div>-->
+<!--    </div>-->
 
-    <div class="ar-content" :class="{'ar__blur': isUploading}">
-      <div class="ar-recorder">
-        <icon-button
-          v-if="!isRecording"
-          class="ar-icon ar-icon__lg"
-          :name="iconButtonType"
-          :class="{
-            'ar-icon--rec': isRecording,
-            'ar-icon--pulse': isRecording && volume > 0.02
-          }"
-          @click.native="toggleRecorder"/>
-        <template v-else>
-          <div class="ar-recorder__duration">{{recordedTime}}</div>
-          <icon-button
-                  class="ar-icon ar-icon__lg ar-recorder__stop"
-                  name="stop"
-                  @click.native="stopRecorder"/>
-        </template>
-      </div>
+<!--    <div class="ar-content" :class="{'ar__blur': isUploading}">-->
+<!--      <div class="ar-recorder">-->
+<!--        <icon-button-->
+<!--          class="ar-icon ar-icon__lg"-->
+<!--          :name="iconButtonType"-->
+<!--          :class="{-->
+<!--            'ar-icon&#45;&#45;rec': isRecording,-->
+<!--            'ar-icon&#45;&#45;pulse': isRecording && volume > 0.02-->
+<!--          }"-->
+<!--          @click.native="toggleRecorder"/>-->
+<!--        <icon-button-->
+<!--          class="ar-icon ar-icon__sm ar-recorder__stop"-->
+<!--          name="stop"-->
+<!--          @click.native="stopRecorder"/>-->
+<!--      </div>-->
 
-<!--&lt;!&ndash;      <div class="ar-recorder__records-limit" v-if="attempts">Attempts: {{attemptsLeft}}/{{attempts}}</div>&ndash;&gt;-->
-
-<!--      <div class="ar-recorder__time-limit" v-if="time">Record duration is limited: {{ Math.floor((time * 60)) }}&nbsp;seconds</div>-->
-<!--      <div class="ar-recorder__record-name">Recording for: {{ fileName }}</div>-->
-<!--      <div class="ar-recorder__alert">Click on save button after recording.</div>-->
+<!--      <div class="ar-recorder__records-limit" v-if="attempts">Attempts: {{attemptsLeft}}/{{attempts}}</div>-->
+<!--      <div class="ar-recorder__duration">{{recordedTime}}</div>-->
+<!--      <div class="ar-recorder__time-limit" v-if="time">Record duration is limited: {{time}}m</div>-->
 
 <!--      <div class="ar-records">-->
 <!--        <div-->
@@ -247,11 +316,11 @@
 <!--            <div class="ar__text">Record {{idx + 1}}</div>-->
 <!--            <div class="ar__text">{{record.duration}}</div>-->
 
-<!--&lt;!&ndash;            <downloader&ndash;&gt;-->
-<!--&lt;!&ndash;              v-if="record.id === selected.id && showDownloadButton"&ndash;&gt;-->
-<!--&lt;!&ndash;              class="ar__downloader"&ndash;&gt;-->
-<!--&lt;!&ndash;              :record="record"&ndash;&gt;-->
-<!--&lt;!&ndash;              :filename="filename"/>&ndash;&gt;-->
+<!--            <downloader-->
+<!--              v-if="record.id === selected.id && showDownloadButton"-->
+<!--              class="ar__downloader"-->
+<!--              :record="record"-->
+<!--              :filename="filename"/>-->
 
 <!--            <uploader-->
 <!--              v-if="record.id === selected.id && showUploadButton"-->
@@ -262,13 +331,14 @@
 <!--              :upload-url="uploadUrl"/>-->
 <!--        </div>-->
 <!--      </div>-->
+
 <!--      <audio-player :record="selected"/>-->
-    </div>
-  </div>
+<!--    </div>-->
+<!--  </div>-->
 </template>
 
 <script>
-  import AudioPlayer from './player2'
+  import AudioPlayer from './player'
   import Downloader  from './downloader'
   import IconButton  from './icon-button'
   import Recorder    from '../lib/recorder'
@@ -282,9 +352,12 @@
       attempts : { type: Number },
       time     : { type: Number },
 
+      bitRate    : { type: Number, default: 128   },
+      sampleRate : { type: Number, default: 44100 },
+
       showDownloadButton : { type: Boolean, default: true },
       showUploadButton   : { type: Boolean, default: true },
-      fileName: { type: String, default: 'record'},
+      format: { type: String, default: 'mp3'},
       cardType: { type: String, default: 'hearts'},
       cardNumber: { type: String, default: '1'},
 
@@ -333,6 +406,14 @@
     },
     methods: {
       async afterRecording (data) {
+        function sleep(milliseconds) {
+          const date = Date.now();
+          let currentDate = null;
+          do {
+            currentDate = Date.now();
+          } while (currentDate - date < milliseconds);
+        }
+        await sleep(300);
         data.cardType = this.cardType
         data.cardNumber = this.cardNumber
         this.selected = data
@@ -358,7 +439,7 @@
         if (!this.isRecording || (this.isRecording && this.isPause)) {
           this.recorder.start()
         } else {
-          this.recorder.pause()
+          this.recorder.stop()
         }
       },
       stopRecorder () {
@@ -386,7 +467,10 @@
           beforeRecording : this.beforeRecording,
           afterRecording  : this.afterRecording,
           pauseRecording  : this.pauseRecording,
-          micFailed       : this.micFailed
+          micFailed       : this.micFailed,
+          bitRate         : this.bitRate,
+          sampleRate      : this.sampleRate,
+          format          : this.format
         })
       }
     },
@@ -407,7 +491,7 @@
         if (this.time && this.recorder.duration >= this.time * 60) {
           this.stopRecorder()
         }
-        return convertTimeMMSS(this.time * 60 - this.recorder.duration)
+        return convertTimeMMSS(this.recorder.duration)
       },
       volume () {
         return parseFloat(this.recorder.volume)

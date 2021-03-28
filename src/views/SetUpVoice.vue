@@ -41,7 +41,14 @@
                                             <h3 class="text-primary text-uppercase not-selectable" style="font-size: 1.8rem; color: #1A1A1D!important;">{{ cardName(x.toString()) }}</h3>
                                         </div>
                                         <div class="col-6 justify-content-md-center text-center not-selectable">
-                                            <audio-recorder-hold :card-type="card" :card-number="x.toString()" :mime-type="mimeType"/>
+                                          <audio-recorder
+                                              :attempts="1"
+                                              :time="3"
+                                              :card-number="x.toString()"
+                                              :card-type="card"
+                                              f
+                                          />
+<!--                                            <audio-recorder-hold :card-type="card" :card-number="x.toString()" :mime-type="mimeType"/>-->
                                         </div>
                                     </div>
                                 </template>
@@ -60,6 +67,7 @@ import Tabs from '../components/Tabs/Tabs'
 import Modal from '../components/Modal'
 import TabPane from '../components/Tabs/TabPane'
 import AudioRecorderHold from './components/audio-recorder'
+import AudioRecorder from '../components/vue-audio-recorder/components/recorder'
 import { SlideYUpTransition, SlideXRightTransition } from 'vue2-transitions'
 import Bowser from "bowser";
 export default {
