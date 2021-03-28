@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" style="width: 108vw">
         <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important;" :style="{ height: windowHeight + 'px', backgroundColor: randomColor(), backgroundImage: 'url(' + this.$store.state.fakeScreen + ')' }">
             <div class="clock">
                 <div class="position-relative text-center">
@@ -7,20 +7,17 @@
                     <p class="date">{{ date }}</p>
                 </div>
             </div>
-            <div class="container py-0" style="position: absolute; z-index: 2!important;">
-                <div class="row row-grid align-items-center">
-                  <vue-drag-resize :isActive="false" v-on:dragging="resize">
-                    <div class="col-11" style="margin-bottom: 5rem!important; position: absolute" :style="{ top: top + 'px!important',  left: left + 'px!important'}">
-                        <div class="position-relative text-center">
-                          <vue-audio
-                              :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                              :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                              :width="windowWidth * 0.9"
-                          ></vue-audio>
-                        </div>
-                      </div>
-                  </vue-drag-resize>
-                </div>
+            <div class="container py-0" style="position: absolute; z-index: 2!important; width:10%">
+                <vue-drag-resize style="margin: 0 auto; position: relative" :isActive="false" :y="top" axis="y" :is-resizable="false" :w="windowWidth*0.9" :h="playerHeight" v-on:dragging="resize" :parentW="windowWidth" :parentH="windowHeight" :parent-limitation="true">
+                    <div class="position-relative text-center">
+                        <vue-audio
+                            id="audioPlayer"
+                            :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                            :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                            :width="windowWidth * 0.9"
+                        ></vue-audio>
+                    </div>
+                </vue-drag-resize>
             </div>
             <div style="position: absolute; background: #1F2020; z-index: 99; left: 0px; bottom: 0px; width: 100%; padding: 20px; display: inline-block!important;">
 <!--                <base-button style="" size="lg" type="white" @click="moveUp" outline>Move Up</base-button>-->
@@ -32,18 +29,17 @@
 </template>
 
 <script>
-import DraggableDiv from '../components/DraggableDiv'
 const play = require('audio-play');
 const load = require('audio-loader');
 import VueAudio from "../components/vue-audio-better/src/VueAudio";
 export default {
     name: "perform",
     components: {
-        DraggableDiv,
         VueAudio,
     },
     data() {
         return {
+            playerHeight: 253,
             top: 0,
             left: 0,
             time: '',
@@ -52,6 +48,7 @@ export default {
             months: ["January","February","March","April","May","June","July","August","September","October","November","December"],
             windowHeight: window.innerHeight,
             windowWidth: window.innerWidth,
+            width: window.screen.width,
             txt: '',
             marginTop: 11,
             cardType: 'hearts',
@@ -61,8 +58,12 @@ export default {
         }
     },
     methods: {
+        getAudioPlayerHeight() {
+          this.playerHeight = document.getElementById("audioPlayer").clientHeight
+        },
         resize(newRect) {
-          this.top = newRect.top + 180;
+          this.getAudioPlayerHeight()
+          this.top = newRect.top;
           this.left = newRect.left;
         },
         updateTime() {
@@ -94,6 +95,7 @@ export default {
         onResize() {
             this.windowHeight = window.innerHeight
             this.windowWidth = window.innerWidth
+            this.width = window.screen.width
         },
         randomColor() {
             let x = Math.round(0xffffff * Math.random()).toString(16)

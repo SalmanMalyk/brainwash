@@ -181,42 +181,6 @@ export default {
     this.thunk = this.$refs.trunk;
     this.sliderVol = this.$refs.sliderVol;
     this.thunkVol = this.$refs.trunkVol;
-    // this.thunk.onmousedown = e => {
-    //     let pWidth = parseInt(this.pWidth);
-    //     let disX = e.clientX;
-    //     document.onmousemove = e => {
-    //         // 拖拽的时候获取的新width
-    //         let newWidth = e.clientX - disX + pWidth;
-    //         // 拖拽的时候得到新的百分比
-    //         let scale = newWidth / this.slider.offsetWidth;
-    //         this.per = Math.ceil((this.max - this.min) * scale + this.min);
-    //         this.per = Math.max(this.per,this.min);
-    //         this.per = Math.min(this.per,this.max);
-    //     }
-    //     document.onmouseup = () => {
-    //         document.onmousemove = document.onmouseup = null;
-    //         this.setProgress(this.scale);
-    //     }
-    //     return false;
-    // }
-    // this.thunkVol.onmousedown = e => {
-    //   let pWidth = parseInt(this.pWidth);
-    //   let disX = e.clientX;
-    //   document.onmousemove = e => {
-    //     // 拖拽的时候获取的新width
-    //     let newWidth = e.clientX - disX + pWidth;
-    //     // 拖拽的时候得到新的百分比
-    //     let scale = newWidth / this.slider.offsetWidth;
-    //     this.per = Math.ceil((this.max - this.min) * scale + this.min);
-    //     this.per = Math.max(this.per,this.min);
-    //     this.per = Math.min(this.per,this.max);
-    //   }
-    //   document.onmouseup = () => {
-    //     document.onmousemove = document.onmouseup = null;
-    //     this.setProgress(this.scale);
-    //   }
-    //   return false;
-    // }
   },
 }
 </script>
@@ -232,6 +196,7 @@ export default {
     background-color: #1F2020!important;
   }
   .vue-slider-rail {
+    margin-top: 0.15rem;
     height: 3.5px!important;
     background-color: rgba(37,40,42,0.35)!important;
   }

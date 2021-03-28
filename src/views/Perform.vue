@@ -1,5 +1,5 @@
 <template>
-    <div v-touch:swipe.bottom="swipeBottomHandler">
+    <div v-touch:swipe.bottom="swipeBottomHandler" style="width: 100vw">
         <div v-if="step === 1">
             <div class="row">
                 <div class="col-6" @click="chooseCardType('hearts')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
@@ -27,19 +27,17 @@
                             <p class="date">{{ date }}</p>
                         </div>
                     </div>
-                    <div class="container py-0" style="position: absolute; z-index: 2!important;">
-                        <div class="row row-grid align-items-center">
-                          <div class="col-11" style="margin-bottom: 5rem!important; position: absolute" :style="{ top: this.$store.state.top + 'px!important',  left: this.$store.state.left + 'px!important'}">
-                                <div class="position-relative text-center">
-                                    <VueAudioFake
-                                            :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                                            :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                                            :loop="true"
-                                            :autoplay="true"
-                                            :width="windowWidth * 0.9"
-                                    ></VueAudioFake>
-                                </div>
-                            </div>
+                    <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
+                        <div class="position-relative text-center"
+                             :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                            <VueAudioFake
+                                style="margin: 0 auto; position: relative"
+                                :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                                :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                                :loop="true"
+                                :autoplay="true"
+                                :width="windowWidth * 0.9"
+                            ></VueAudioFake>
                         </div>
                     </div>
                 </div>
@@ -54,26 +52,22 @@
         <div v-else>
             <div class="row">
                 <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important;" :style="{ height: windowHeight + 'px', backgroundColor: randomColor(), backgroundImage: 'url(' + this.$store.state.fakeScreen + ')' }">
-<!--                    <img :src="$store.state.fakeScreen" style="width: 100%; height: auto; z-index: 1; position: relative; left: 0px; top: 0px;"/>-->
                     <div class="clock">
                         <div class="position-relative text-center">
                             <p class="time" style="margin-bottom: 4px;">{{ time }}</p>
                             <p class="date">{{ date }}</p>
                         </div>
                     </div>
-                    <div class="container py-0" style="position: absolute; z-index: 2!important;">
-                        <div class="row row-grid align-items-center">
-                            <div class="col-11" style="margin-bottom: 5rem!important; position: absolute" :style="{ top: this.$store.state.top + 'px!important',  left: this.$store.state.left + 'px!important'}">
-                                <div class="position-relative text-center">
-                                    <vue-audio
-                                            :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                                            :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                                            :loop="true"
-                                            :autoplay="true"
-                                            :width="windowWidth * 0.9"
-                                    ></vue-audio>
-                                </div>
-                            </div>
+                    <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
+                      <div class="position-relative text-center" :style="{ width: windowWidth + 'px', top: this.$store.state.top + 'px!important'}">
+                            <vue-audio
+                                style="margin: 0 auto; position: relative"
+                                :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                                :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                                :loop="true"
+                                :autoplay="true"
+                                :width="windowWidth * 0.9"
+                            ></vue-audio>
                         </div>
                     </div>
                 </div>

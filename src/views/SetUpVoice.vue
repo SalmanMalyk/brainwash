@@ -1,14 +1,6 @@
 <template>
     <div style="height: 100%!important;" class="not-selectable">
         <section class="section section section-shaped my-0 overflow-hidden" style="height: 100%!important;">
-<!--            <div class="shape shape-style-1 bg-gradient-success shape-skew">-->
-<!--                <span></span>-->
-<!--                <span></span>-->
-<!--                <span></span>-->
-<!--                <span></span>-->
-<!--                <span></span>-->
-<!--                <span></span>-->
-<!--            </div>-->
             <div class="container py-0" style="height: 100%!important;">
                 <tabs :fill="true" circle style="height: 100%!important;">
                     <perfect-scrollbar style="height: 80%!important;">
@@ -28,15 +20,13 @@
                                             <h3 class="text-uppercase" style="font-size: 1.8rem; color: #1A1A1D!important;">{{ cardName(x.toString()) }}</h3>
                                         </div>
                                         <div class="col-6 justify-content-md-center text-center">
-<!--                                            <slide-x-right-transition :duration="350" :delay="70" group>-->
-                                                <template v-if="selectedForPlay !== x">
-                                                    <base-button type="primary" icon="fa fa-play-circle" @click="selectForPlay(x)" class=" bg-gradient-primary "></base-button>
-                                                    <base-button type="primary" icon="fa fa-trash" @click="deleteRecording(card, x.toString())" class="bg-gradient-primary"></base-button>
-                                                </template>
-                                                <template v-else>
-                                                    <base-button type="primary" icon="fa fa-stop-circle" @click="resetPlay()" class="bg-gradient-primary">Close</base-button>
-                                                </template>
-<!--                                            </slide-x-right-transition>-->
+                                            <template v-if="selectedForPlay !== x">
+                                                <base-button type="primary" icon="fa fa-play-circle" @click="selectForPlay(x)" class=" bg-gradient-primary "></base-button>
+                                                <base-button type="primary" icon="fa fa-trash" @click="deleteRecording(card, x.toString())" class="bg-gradient-primary"></base-button>
+                                            </template>
+                                            <template v-else>
+                                                <base-button type="primary" icon="fa fa-stop-circle" @click="resetPlay()" class="bg-gradient-primary">Close</base-button>
+                                            </template>
                                         </div>
                                     </div>
                                     <slide-y-up-transition :duration="350" :delay="70">
@@ -52,15 +42,6 @@
                                         </div>
                                         <div class="col-6 justify-content-md-center text-center not-selectable">
                                             <audio-recorder-hold :card-type="card" :card-number="x.toString()" :mime-type="mimeType"/>
-<!--                                            <audio-recorder-->
-<!--                                                    :fileName="cardNameAndType(card, x.toString())"-->
-<!--                                                    :cardType="card"-->
-<!--                                                    :cardNumber="x.toString()"-->
-<!--                                                    :attempts="1"-->
-<!--                                                    :time="0.1"-->
-<!--                                                    :showDownloadButton="false"-->
-<!--                                                    :successful-upload="closeRecorder"/>-->
-<!--                                            <base-button type="primary" icon="fa fa-microphone" @click="startRecorder(card, x.toString())" class="bg-gradient-primary"></base-button>-->
                                         </div>
                                     </div>
                                 </template>

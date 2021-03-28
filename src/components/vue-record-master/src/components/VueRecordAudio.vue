@@ -10,32 +10,36 @@
 <!--  >-->
 <!--    <span></span>-->
 <!--  </div>-->
+<!--  <div-->
+<!--      class="vue-audio-recorder"-->
+<!--      :class="{-->
+<!--      'active': isRecording,-->
+<!--      'paused': isPaused-->
+<!--    }"-->
+<!--      @mousedown="startRecording"-->
+<!--      @mouseleave="stopRecording"-->
+<!--      @mouseup="stopRecording"-->
+<!--      @touchstart="startRecording"-->
+<!--      @touchend="stopRecording"-->
+<!--      @touchcancel="stopRecording"-->
+<!--  >-->
   <div
       class="vue-audio-recorder"
       :class="{
-      'active': isRecording,
-      'paused': isPaused
-    }"
-      @mousedown="startRecording"
-      @mouseleave="stopRecording"
-      @mouseup="stopRecording"
-      @touchstart="startRecording"
-      @touchend="stopRecording"
-      @touchcancel="stopRecording"
+    'active': isRecording,
+    'paused': isPaused
+  }"
+      @mousedown="switchRecording"
+      @touchstart="switchRecording"
   >
-    <span></span>
+    <i style="font-size: 1.5rem; color: #fff; padding: 1.1rem" :class="{
+      'ni ni-button-pause': isRecording}"></i>
+    <span v-if="!isRecording"></span>
   </div>
 </template>
 
 <script>
 import ElementMixin from './ElementMixin'
-
-const supportedTypes = [
-  'audio/aac',
-  'audio/ogg',
-  'audio/wav',
-  'audio/webm'
-]
 
 export default {
   name: 'VueRecordAudio',
@@ -44,7 +48,6 @@ export default {
     mimeType: {
       type: String,
       default: 'audio/webm',
-      validator: v => supportedTypes.includes(v)
     }
   },
   data () {
@@ -57,10 +60,23 @@ export default {
   },
   mounted() {
     // console.log(this.mimeType)
-  }
+  },
+  methods: {
+    switchRecording() {
+      if (this.isRecording) {
+        this.stopRecording()
+      } else {
+        this.startRecording()
+      }
+    }
+  },
 }
 </script>
-
+<style>
+.active::after, .active::before {
+  display: none!important;
+}
+</style>
 <style lang="scss">
   .vue-audio-recorder {
     position: relative;

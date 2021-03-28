@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="not-selectable">
+    <div id="app" class="not-selectable" style="width: 100vw; height: 100vh">
         <Particles
                 id="brainwash-bg"
                 style="position: absolute; top:0px; bottom:0px; width: 100%; z-index: -1; background-color: #000;"
@@ -260,7 +260,9 @@ export default {
         margin: 10px 10px 0px 0px;
     }
     body, #app {
-        overscroll-behavior: none
+        overscroll-behavior: none;
+      overflow: hidden;
+
     }
     .alert-info {
         background-color: rgba(55,213,242,0.92) !important;
