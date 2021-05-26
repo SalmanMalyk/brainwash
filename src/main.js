@@ -32,6 +32,7 @@ import FileSelector from 'vue-file-selector';
 
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Vue2TouchEvents from 'vue2-touch-events'
+import VueTouch from 'vue-touch';
 import VueRecord from './components/vue-record-master/src/components/index'
 const screenOrientationJs = require('screen-orientation-js');
 // import VueRecord from '@codekraft-studio/vue-record'
@@ -39,15 +40,22 @@ import AudioRecorder2 from 'audio-recorder-polyfill'
 if (!window.MediaRecorder) {
   window.MediaRecorder = AudioRecorder2
 }
-// window.MediaRecorder = AudioRecorder2
 import VueDragResize from 'vue-drag-resize'
+import VueMeta from 'vue-meta'
+import VueRx from 'vue-rx'
+import VuejsClipper from "vuejs-clipper/dist/vuejs-clipper.umd"
+import "vuejs-clipper/dist/vuejs-clipper.css"
 
+Vue.use(VueRx)
+Vue.use(VuejsClipper)
+Vue.use(VueMeta)
+Vue.use(VueTouch)
 Vue.component('vue-drag-resize', VueDragResize)
 Vue.use(VueRecord)
 Vue.use(FileSelector);
 Vue.use(Vue2TouchEvents, {
   touchHoldTolerance: 130,
-  swipeTolerance: 160,
+  swipeTolerance: 200,
 })
 Vue.use(Vuelidate);
 Vue.use(PerfectScrollbar)

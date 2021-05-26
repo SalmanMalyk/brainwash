@@ -14,6 +14,10 @@ const mutations = {
     setLeft (state, data) {
         state.left = data
     },
+    setMode (state, data) {
+        console.log(data)
+        state.mode = data
+    },
 }
 
 export default mutations

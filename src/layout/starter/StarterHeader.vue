@@ -8,7 +8,7 @@
                     </router-link>
                 </div>
                 <div class="alignright" style="text-align: right;">
-                    <base-button size="sm" type="white" outline icon="ni ni-bold-left" @click="goBack">Back</base-button>
+                    <base-button size="sm" type="primary" icon="ni ni-bold-left" @click="goBack">Back</base-button>
                 </div>
             </div>
         </div>

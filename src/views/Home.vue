@@ -1,35 +1,42 @@
 <template>
-    <div>
-        <section class="section section my-0 overflow-hidden">
-            <div class="container py-0" style="margin-bottom: 6rem!important;">
-                <div class="row row-grid align-items-center">
-                    <div class="col-12" style="margin-top:2rem; margin-bottom: 5rem!important;">
-                        <div class="position-relative text-center pl-sm-5">
-                            <img src="img/brand/brainwash.png" style="width: 200px;" class="img-fluid floating logo">
-                        </div>
-                    </div>
-                    <div class="col-11" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
-                        <router-link to="/set-up" title="Set-Up Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">SET-UP</base-button>
-                        </router-link>
-                    </div>
-                    <div class="col-11" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
-                        <base-button style="min-width: 13rem!important;" size="lg" type="primary" @click="perform">PERFORM</base-button>
-                    </div>
-                    <div class="col-11" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
-                        <router-link to="/tutorial" title="Tutorial Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">TUTORIAL</base-button>
-                        </router-link>
-                    </div>
-                    <div class="col-11" style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important;">
-                        <router-link to="/contact" title="Contact Page">
-                            <base-button style="min-width: 13rem!important;" size="lg" type="primary">CONTACT</base-button>
-                        </router-link>
-                    </div>
+  <div>
+    <section class="section section section-shaped my-0 overflow-hidden">
+      <div class="container py-0" style="margin-bottom: 4.5rem!important;">
+        <div class="row row-grid align-items-center">
+          <div class="col-12" style="text-align: center!important; margin-top:0px!important;">
+            <card style="background-color: rgba(0,0,0,0)">
+              <div class="align-middle">
+                <div style="text-align: center;">
+                  <img src="img/brand/brainwash.png" style="width: 200px;" class="img-fluid floating logo">
                 </div>
-            </div>
-        </section>
-    </div>
+              </div>
+            </card>
+            <card style="background-color: rgba(0,0,0,0)">
+              <div class="align-middle">
+                <div style="text-align: center;">
+                  <router-link to="/set-up" title="Set-Up Page">
+                    <base-button style="min-width: 13rem!important; margin-top:2.2rem;" size="lg" type="primary">SET-UP</base-button>
+                  </router-link>
+                  <br/>
+                  <a>
+                    <base-button style="min-width: 13rem!important; margin-top:1.4rem;" size="lg" type="primary" @click="perform">PERFORM</base-button>
+                  </a>
+                  <br/>
+                  <router-link to="/tutorial" title="Tutorial Page">
+                    <base-button style="min-width: 13rem!important; margin-top:1.4rem;" size="lg" type="primary">TUTORIAL</base-button>
+                  </router-link>
+                  <br/>
+                  <router-link to="/contact" title="Contact Page">
+                    <base-button style="min-width: 13rem!important; margin-top:1.4rem;" size="lg" type="primary">CONTACT</base-button>
+                  </router-link>
+                </div>
+              </div>
+            </card>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>

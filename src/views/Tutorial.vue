@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-touch:swipe.bottom="swipeBottomHandler">
         <section class="section section section-shaped my-0 overflow-hidden">
             <div class="container py-0" style="margin-bottom: 6rem!important;">
                 <div class="row row-grid align-items-center">
@@ -19,6 +19,11 @@
 <script>
 export default {
   name: "tutorial",
-  components: {}
+  components: {},
+  methods: {
+    swipeBottomHandler() {
+      this.$router.go(-1)
+    },
+  },
 };
 </script>

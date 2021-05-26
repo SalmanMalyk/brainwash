@@ -1,33 +1,27 @@
 <template>
-  <div class="vueAudioBetter" :style="{width: totalWidth}">
-    <div class="row align-middle" style="width: auto!important; text-align: center!important; position: relative; margin: 14px 12px;">
-      <div class="col-1 align-middle" style="text-align: left; padding: 0px!important;">
-        <img style="height: 6rem; border-radius: 0.5rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/album_art.png')"/>
+  <div class="vueAudioBetter" style="width: 94.6vw;">
+    <div class="row align-middle" style="width: auto!important; text-align: center!important; position: relative; margin: 18px 16px 0 16px;">
+      <div class="col-3 align-middle" style="text-align: left; padding: 0px!important;">
+        <img style="height: 6rem; border-radius: 0.5rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/album_art_android.png')"/>
       </div>
-      <div class="col-9 align-middle" style="line-height: 1.0rem; text-align: left; padding: 1.5rem 0 0 4.7rem !important; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;">
-        <span style="font-size: 13px; font-weight: bold; color:#C6C6C6;">iPhone</span><br/>
-        <!--        <span style="line-height: 1.6rem; color: #1F2020; font-weight: bold; font-size: 16px;">{{ fileName }}</span><br/>-->
+      <div class="col-9 align-middle" style="line-height: 1.0rem; text-align: left; padding: 1.6rem 0 0.2rem 1.2rem !important; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;">
+        <!--        <span style="font-size: 13px; font-weight: bold; color:#C6C6C6;"><img style="height: 1.4rem; border-radius: 1.4rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/youtube-music.png')"/>&nbsp;Youtube Music</span>-->
+        <span style="font-size: 13px; font-weight: bold; color:#C6C6C6;">Youtube Music</span>
         <div style="line-height: 1.6rem; color: #FFFFFF; font-weight: bold; font-size: 16px;">Brainwash Recording</div><br/>
-        <!--        <span style="color: #1F2020; font-size: 13px;">Brainwash</span>-->
-      </div>
-      <div class="col-1 align-middle" style="line-height: 1.0rem; padding: 1.2rem 0.7rem 0 2.1rem !important;text-align: right;">
-          <span>
-            <img style="margin-top: 1rem!important; height: 1.4rem;" :src="require('../../../assets/AirPlay.png')"/>
-          </span>
       </div>
     </div>
-    <div class="slider" ref="slider" @click="handleModifyProgress">
-      <div class="progressInfo"></div>
-      <div class="process" :style="{width: pWidth}"></div>
-      <div class="thunk" ref="trunk" :style="{left}">
-        <div class="block"></div>
-      </div>
-      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.4rem; margin-top: 4px; position: absolute; left: 0px; color: #C6C6C6;">{{ _sToMs(seek) }}</span>
-      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.4rem; margin-top: 4px; position: absolute; right: 0px; color: #C6C6C6;">- {{ _sToMs(duration) }}</span>
-    </div>
-    <div class="operatorButton" style="margin-top: 2.5rem; margin-bottom: 1.8rem;">
+    <!--    <div class="slider" ref="slider" @click="handleModifyProgress">-->
+    <!--      <div class="progressInfo"></div>-->
+    <!--      <div class="process" :style="{width: pWidth}"></div>-->
+    <!--      <div class="thunk" ref="trunk" :style="{left}">-->
+    <!--        <div class="block"></div>-->
+    <!--      </div>-->
+    <!--      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.4rem; margin-top: 4px; position: absolute; left: 0px; color: #C6C6C6;">{{ _sToMs(seek) }}</span>-->
+    <!--      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.4rem; margin-top: 4px; position: absolute; right: 0px; color: #C6C6C6;">- {{ _sToMs(duration) }}</span>-->
+    <!--    </div>-->
+    <div class="operatorButton" style="margin-top: 2.2rem; margin-bottom: 2rem;">
       <span class="iconfont">
-        <img style="height: 1.6rem;" :src="require('../../../assets/Rewind.png')"/>
+        <img style="height: 1.6rem;" :src="require('../../../assets/Rewind_white.png')"/>
       </span>
       <span class="iconfont" @click="togglePlayback" v-if="!playing">
         <img style="height: 2.1rem;" :src="require('../../../assets/Play.png')"/>
@@ -36,25 +30,8 @@
         <img style="height: 2.1rem;" :src="require('../../../assets/Pause.png')"/>
       </span>
       <span class="iconfont">
-        <img style="height: 1.6rem;" :src="require('../../../assets/FastForward.png')"/>
+        <img style="height: 1.6rem;" :src="require('../../../assets/FastForward_white.png')"/>
       </span>
-    </div>
-    <div class="align-items-center" style="width: 84.5%!important; text-align: center!important; position: relative; margin: 22px auto 26px auto;">
-      <div class="row">
-        <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
-          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetFakeVolume(false)">
-            <img style="height: 1rem; margin-top: 2px;" :src="require('../../../assets/AudioDec.png')"/>
-          </span>
-        </div>
-        <div class="col-10" style="padding: 0px 10px!important; ">
-          <vue-slider v-model="curVolume" :min="0" :max="1" :interval="0.1" style="height: 5.5px!important;" v-bind="options" :silent="true" tooltip="none" />
-        </div>
-        <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
-          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetFakeVolume(true)">
-            <img style="height: 1.1rem;" :src="require('../../../assets/AudioInc.png')"/>
-          </span>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -64,7 +41,7 @@ import './font/iconfont.css';
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/antd.css'
 export default {
-  name: 'VueAudio',
+  name: 'VueAudioSetUpAndroid',
   mixins: [Audio],
   components: {
     VueSlider,
@@ -78,13 +55,12 @@ export default {
       min: 0,
       max: 100,
       slider: null,
-      sliderVol: 1,
+      sliderVol: 0.5,
       thunk: null,
       per: 0,
       rate: 1,
       isMute: true,
-      curVolume: 1,
-      fakeVolume: 0.5,
+      curVolume: 0.5,
       // sliderVol:  0.5,
       totalWidth: 500
     }
@@ -160,10 +136,6 @@ export default {
       this.curVolume > 1 ? this.curVolume = 1 : this.curVolume < 0 ? this.curVolume = 0 : '';
       this.setVolume(this.curVolume);
     },
-    handleSetFakeVolume(flag) {
-      flag ? this.fakeVolume += 0.1 : this.fakeVolume -= 0.1;
-      this.fakeVolume > 1 ? this.fakeVolume = 1 : this.fakeVolume < 0 ? this.fakeVolume = 0 : '';
-    },
     _sToMs(s) {
       if(typeof s !== 'number') return '00' + ':' + '00'
       s = parseInt(s);
@@ -209,14 +181,13 @@ export default {
 </style>
 <style scoped>
 .vueAudioBetter {
-  z-index: 999!important;
-  background: rgba( 48, 48, 48, 0.60 );
+  background: rgba( 48, 48, 48, 0.85 );
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.22 );
   backdrop-filter: blur( 20.0px );
   -webkit-backdrop-filter: blur( 20.0px );
   border-radius: 10px;
   overflow: hidden;
-  width: auto!important;
+  width: 500px;
   /*min-width: 500px;*/
   margin: 0 10px!important;
   /*background-color: rgba(235,235,277, 0.9);*/

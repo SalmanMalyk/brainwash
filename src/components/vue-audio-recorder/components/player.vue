@@ -17,7 +17,7 @@
       margin: 0 0 0 5px;
 
       & > .ar-player__progress {
-        width: 125px;
+        width: 155px;
       }
     }
 
@@ -42,7 +42,7 @@
     }
 
     &__time {
-      color: rgba(84,84,84,0.5);
+      color: rgba(255,255,255,0.9);
       font-size: 16px;
       width: 41px;
     }
@@ -69,14 +69,14 @@
 
 <template>
   <div class="ar-player">
-    <div class="ar-player-actions">
-      <icon-button
-        id="play"
-        class="ar-icon ar-icon__lg ar-player__play"
-        :name="playBtnIcon"
-        :class="{'ar-player__play--active': isPlaying}"
-        @click.native="playback"/>
-    </div>
+<!--    <div class="ar-player-actions">-->
+<!--      <icon-button-->
+<!--        id="play"-->
+<!--        class="ar-icon ar-icon__lg ar-player__play"-->
+<!--        :name="playBtnIcon"-->
+<!--        :class="{'ar-player__play&#45;&#45;active': isPlaying}"-->
+<!--        @click.native="playback"/>-->
+<!--    </div>-->
 
     <div class="ar-player-bar">
       <div class="ar-player__time">{{playedTime}}</div>
@@ -122,6 +122,7 @@
       this.player = document.getElementById(this.playerUniqId)
 
       this.player.addEventListener('ended', () => {
+        this.player.play()
         this.isPlaying = false
       })
 
@@ -136,6 +137,8 @@
         this._resetProgress()
       })
       this.player.volume = 1
+      this.player.play()
+
     },
     computed: {
       audioSource () {
@@ -186,11 +189,6 @@
           this.player.currentTime = pos * this.player.duration
         }
       },
-      _onChangeVolume (val) {
-        if (val) {
-          this.player.volume = val
-        }
-      }
     }
   }
 </script>

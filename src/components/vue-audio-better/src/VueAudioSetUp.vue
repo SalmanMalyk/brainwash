@@ -1,5 +1,5 @@
 <template>
-  <div class="vueAudioBetter" :style="{width: totalWidth}">
+  <div class="vueAudioBetter" style="width: 94.6vw;">
     <div class="row align-middle" style="width: auto!important; text-align: center!important; position: relative; margin: 14px 12px;">
       <div class="col-1 align-middle" style="text-align: left; padding: 0px!important;">
         <img style="height: 6rem; border-radius: 0.5rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/album_art.png')"/>
@@ -42,7 +42,7 @@
     <div class="align-items-center" style="width: 84.5%!important; text-align: center!important; position: relative; margin: 22px auto 26px auto;">
       <div class="row">
         <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
-          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetFakeVolume(false)">
+          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetVolume(false)">
             <img style="height: 1rem; margin-top: 2px;" :src="require('../../../assets/AudioDec.png')"/>
           </span>
         </div>
@@ -50,7 +50,7 @@
           <vue-slider v-model="curVolume" :min="0" :max="1" :interval="0.1" style="height: 5.5px!important;" v-bind="options" :silent="true" tooltip="none" />
         </div>
         <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
-          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetFakeVolume(true)">
+          <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetVolume(true)">
             <img style="height: 1.1rem;" :src="require('../../../assets/AudioInc.png')"/>
           </span>
         </div>
@@ -78,13 +78,12 @@ export default {
       min: 0,
       max: 100,
       slider: null,
-      sliderVol: 1,
+      sliderVol: 0.5,
       thunk: null,
       per: 0,
       rate: 1,
       isMute: true,
-      curVolume: 1,
-      fakeVolume: 0.5,
+      curVolume: 0.5,
       // sliderVol:  0.5,
       totalWidth: 500
     }
@@ -160,10 +159,6 @@ export default {
       this.curVolume > 1 ? this.curVolume = 1 : this.curVolume < 0 ? this.curVolume = 0 : '';
       this.setVolume(this.curVolume);
     },
-    handleSetFakeVolume(flag) {
-      flag ? this.fakeVolume += 0.1 : this.fakeVolume -= 0.1;
-      this.fakeVolume > 1 ? this.fakeVolume = 1 : this.fakeVolume < 0 ? this.fakeVolume = 0 : '';
-    },
     _sToMs(s) {
       if(typeof s !== 'number') return '00' + ':' + '00'
       s = parseInt(s);
@@ -209,14 +204,13 @@ export default {
 </style>
 <style scoped>
 .vueAudioBetter {
-  z-index: 999!important;
   background: rgba( 48, 48, 48, 0.60 );
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.22 );
   backdrop-filter: blur( 20.0px );
   -webkit-backdrop-filter: blur( 20.0px );
   border-radius: 10px;
   overflow: hidden;
-  width: auto!important;
+  width: 500px;
   /*min-width: 500px;*/
   margin: 0 10px!important;
   /*background-color: rgba(235,235,277, 0.9);*/

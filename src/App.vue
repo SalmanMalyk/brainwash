@@ -12,7 +12,7 @@
         <router-view name="header"></router-view>
         <main>
             <fade-transition origin="center" mode="out-in" :duration="250">
-                <router-view :style="{ height: this.windowHeight+'px' }"/>
+                <router-view :style="{ height: this.windowHeight+'px' }" />
             </fade-transition>
         </main>
         <router-view style="position: fixed; left: 0; bottom: 0; width: 100%; text-align: center;" name="footer"></router-view>
@@ -20,6 +20,7 @@
 </template>
 <script>
 import { FadeTransition } from "vue2-transitions";
+const bowser = require('bowser')
 
 const bgOpts = {
     'fpsLimit': 40,
@@ -207,6 +208,14 @@ export default {
             backgroundOptions: bgOpts,
         };
     },
+    // metaInfo() {
+    //   return {
+    //     title: "Performance Mode",
+    //     meta: [
+    //       { name: 'apple-mobile-web-app-status-bar-style', content:  'black-translucent'},
+    //     ],
+    //   }
+    // },
     created () {
         document.addEventListener(
             'swUpdated', this.showRefreshUI, { once: true }
@@ -236,9 +245,15 @@ export default {
         },
     },
     mounted() {
-        this.$nextTick(() => {
-            window.addEventListener('resize', this.onResize);
-        })
+      if (this.$store.state.mode === '') {
+        const md = new bowser.getParser(window.navigator.userAgent)
+        const newVal = md.parsedResult.os.name === 'android' ? 'android' : 'ios'
+        this.$store.state.mode = newVal
+        this.$store.commit('setMode', newVal)
+      }
+      this.$nextTick(() => {
+          window.addEventListener('resize', this.onResize);
+      })
     },
 
     beforeDestroy() {

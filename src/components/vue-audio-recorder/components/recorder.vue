@@ -1,7 +1,8 @@
 <style lang="scss">
 .vue-audio-recorder {
   position: relative;
-  background-color: #4DB6AC;
+  //background-color: #4DB6AC;
+  background-color: whitesmoke;
   border-radius: 50%;
   width: 64px;
   height: 64px;
@@ -9,10 +10,10 @@
   cursor: pointer;
   box-shadow: 0 0 0 0 rgba(232, 76, 61, 0.7);
   &:hover {
-    background-color: #26A69A;
+    background-color: rgba(163, 51, 39, 0.5);
   }
   &.active {
-    background-color: #ef5350;
+    background-color: #A33327;
     -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
     -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
     animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
@@ -21,7 +22,7 @@
   &:after {
     content: '';
     position: absolute;
-    background-color: #fff;
+    background-color: #A33327;
   }
   &:after {
     top: 30%;
@@ -50,7 +51,7 @@
     &:after {
       content: '';
       position: absolute;
-      background-color: #fff;
+      background-color: #A33327;
     }
     &:before {
       bottom: 50%;
@@ -58,7 +59,7 @@
       height: 100%;
       box-sizing: border-box;
       border-radius: 50%;
-      border: 0.125em solid #fff;
+      border: 0.125em solid #A33327;
       background: none;
       left: 0;
     }
@@ -266,13 +267,13 @@ svg {
   <div
       class="vue-audio-recorder"
       :class="{
-        'active': isRecording
+        'active': isRecording2
       }"
       @click="toggleRecorder"
   >
-    <span v-if="!isRecording"></span>
+    <span v-if="!isRecording2"></span>
     <i v-else style="font-size: 1.5rem; color: #fff; padding: 1.1rem" :class="{
-      'ni ni-button-pause': isRecording}"></i>
+      'ni ni-button-pause': isRecording2}"></i>
   </div>
 <!--  <div class="ar">-->
 <!--    <div class="ar__overlay" v-if="isUploading"></div>-->
@@ -372,6 +373,7 @@ svg {
     },
     data () {
       return {
+        isRecording2  : false,
         isUploading   : false,
         recorder      : this._initRecorder(),
         recordList    : [],
@@ -384,6 +386,15 @@ svg {
       Downloader,
       IconButton,
       Uploader
+    },
+    watch: {
+      isRecording: function (val, oldVal) {
+        if (!oldVal) {
+          setTimeout(() => { this.isRecording2 = !this.isRecording2 }, 250)
+        } else {
+          this.isRecording2 = !this.isRecording2
+        }
+      },
     },
     mounted () {
       this.$eventBus.$on('start-upload', () => {

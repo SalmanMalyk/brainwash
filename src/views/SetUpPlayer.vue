@@ -1,41 +1,80 @@
 <template>
-    <div class="row" style="width: 108vw">
-        <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important;" :style="{ height: windowHeight + 'px', backgroundColor: randomColor(), backgroundImage: 'url(' + this.$store.state.fakeScreen + ')' }">
-            <div class="clock">
-                <div class="position-relative text-center">
-                    <p class="time" style="margin-bottom: 4px;">{{ time }}</p>
-                    <p class="date">{{ date }}</p>
-                </div>
-            </div>
-            <div class="container py-0" style="position: absolute; z-index: 2!important; width:10%">
-                <vue-drag-resize style="margin: 0 auto; position: relative" :isActive="false" :y="top" axis="y" :is-resizable="false" :w="windowWidth*0.9" :h="playerHeight" v-on:dragging="resize" :parentW="windowWidth" :parentH="windowHeight" :parent-limitation="true">
-                    <div class="position-relative text-center">
-                        <vue-audio
-                            id="audioPlayer"
-                            :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                            :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                            :width="windowWidth * 0.9"
-                        ></vue-audio>
-                    </div>
-                </vue-drag-resize>
-            </div>
-            <div style="position: absolute; background: #1F2020; z-index: 99; left: 0px; bottom: 0px; width: 100%; padding: 20px; display: inline-block!important;">
-<!--                <base-button style="" size="lg" type="white" @click="moveUp" outline>Move Up</base-button>-->
-<!--                <base-button style="" size="lg" type="white" @click="moveDown" outline>Move Down</base-button>-->
-                <base-button style="" size="lg" type="white" @click="savePosition" outline>Save</base-button>
-            </div>
+  <div class="row">
+    <div class="col-12 text-center" v-if="$store.state.mode === 'ios'" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultIOS : this.$store.state.fakeScreen) + ')' }">
+      <div class="clock">
+        <div class="position-relative text-center">
+          <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/ios_padlock.png')"/>
+          <p class="time">{{ time }}</p>
+          <p class="date">{{ date }}</p>
         </div>
+      </div>
+      <div class="container py-0 px-0" style="position: absolute; z-index: 2!important; width:0%;">
+        <vue-drag-resize style="margin: 0 auto; position: relative" :isActive="false" :y="top" axis="y" :is-resizable="false" :w="windowWidth" :h="playerHeight" v-on:dragging="resize" :parentW="windowWidth" :parentH="windowHeight" :parent-limitation="true">
+          <div class="position-relative text-center">
+            <vue-audio
+                id="audioPlayer"
+                :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                :width="windowWidth * 0.9"
+            ></vue-audio>
+          </div>
+        </vue-drag-resize>
+      </div>
+      <div style="position: absolute; background: #1F2020; z-index: 99; left: 0px; bottom: 0px; width: 100%; padding: 20px; display: inline-block!important;">
+        <!--                <base-button style="" size="lg" type="white" @click="moveUp" outline>Move Up</base-button>-->
+        <!--                <base-button style="" size="lg" type="white" @click="moveDown" outline>Move Down</base-button>-->
+        <base-button style="" size="lg" type="white" @click="savePosition" outline>Save</base-button>
+      </div>
+      <div class="row" style="margin: 0!important; position: absolute; bottom: 0; width: 100vw;">
+        <div class="col-6" style="text-align: left!important;">
+          <div style="padding-left: 2.6rem; padding-bottom: 2.8rem;">
+            <img style="margin: 1.1rem auto!important; height: 3.4rem; background-color: #1A1A1D; border-radius: 3.4rem; background: rgba( 48, 48, 48, 0.60 ); box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.15 ); backdrop-filter: blur( 20px ); -webkit-backdrop-filter: blur( 20px );" :src="require('../assets/torch.png')"/>
+          </div>
+        </div>
+        <div class="col-6" style="text-align: right!important;">
+          <div style="padding-right: 2.6rem; padding-bottom: 2.8rem;">
+            <img style="margin: 1.1rem auto!important; height: 3.4rem; background-color: #1A1A1D; border-radius: 3.4rem; background: rgba( 48, 48, 48, 0.60 ); box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.15 ); backdrop-filter: blur( 20px ); -webkit-backdrop-filter: blur( 20px );" :src="require('../assets/camera.png')"/>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="col-12 text-center" v-else style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultAndroid : this.$store.state.fakeScreen) + ')' }">
+      <div class="clock" style="z-index: 2!important;">
+        <div class="position-relative text-center">
+          <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/android_padlock.png')"/>
+          <p class="time" style="margin-top: 4rem;">{{ time }}</p>
+          <p class="date" style="font-weight: normal!important;">{{ date }}&nbsp;<img style="width: 35px;" :src="require('../assets/sunny-icon.jpg')"/>&nbsp;76°F</p>
+        </div>
+      </div>
+      <div class="container py-0 px-0" style="position: absolute; z-index: 2!important; width:0%;">
+        <vue-drag-resize style="margin: 0 auto; position: relative" :isActive="false" :y="top" axis="y" :is-resizable="false" :w="windowWidth" :h="playerHeight" v-on:dragging="resize" :parentW="windowWidth" :parentH="windowHeight" :parent-limitation="true">
+          <div class="position-relative text-center">
+            <VueAudioAndroid
+                id="audioPlayer"
+                :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                :width="windowWidth * 0.9"
+            ></VueAudioAndroid>
+          </div>
+        </vue-drag-resize>
+      </div>
+      <div style="position: absolute; background: #1F2020; z-index: 99; left: 0px; bottom: 0px; width: 100%; padding: 20px; display: inline-block!important;">
+        <base-button style="" size="lg" type="white" @click="savePosition" outline>Save</base-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 const play = require('audio-play');
 const load = require('audio-loader');
-import VueAudio from "../components/vue-audio-better/src/VueAudio";
+import VueAudio from "../components/vue-audio-better/src/VueAudioSetUp";
+import VueAudioAndroid from "../components/vue-audio-better/src/VueAudioSetUp_Android";
 export default {
     name: "perform",
     components: {
         VueAudio,
+        VueAudioAndroid,
     },
     data() {
         return {
@@ -67,9 +106,15 @@ export default {
           this.left = newRect.left;
         },
         updateTime() {
+          if (this.$store.state.mode === 'ios') {
             let cd = new Date();
-            this.time = this.zeroPadding(cd.getHours() === 0 ? 12 : cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2);
-            this.date = this.week[cd.getDay()] + ', ' + this.zeroPadding(cd.getDate(), 2) + ' ' + this.months[cd.getMonth()+1];
+            this.time = cd.getHours() === 0 ? 12 : cd.getHours() + ':' + this.zeroPadding(cd.getMinutes(), 2);
+            this.date = this.week[cd.getDay()] + ', ' + cd.getDate() + '. ' + this.months[cd.getMonth()];
+          } else {
+            let cd = new Date();
+            this.time = cd.getHours() === 0 ? 12 : cd.getHours() + ':' + this.zeroPadding(cd.getMinutes(), 2);
+            this.date = this.week[cd.getDay()].slice(0, 3) + ', '  + this.months[cd.getMonth()].slice(0, 3) + " " + cd.getDate();
+          }
         },
         zeroPadding(num, digit) {
             let zero = '';
@@ -211,26 +256,4 @@ div.vdr.active {
 .vdr::before {
   display: none;
 }
-    .clock {
-        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
-        font-weight: bold;
-        color: #fff!important;
-        position: absolute;
-        top: 8%;
-        margin-left: -1rem!important;
-        width: 100% !important;
-    }
-    .time {
-        /*font-weight: bold;*/
-        color: #fff!important;
-        font-size: 4rem!important;
-        line-height: 1.2!important;
-        text-shadow: 0px 0px 18px rgba(150, 150, 150, 0.6);
-    }
-    .date {
-        /*font-weight: bold;*/
-        color: #fff!important;
-        font-size: 1.4rem!important;
-        text-shadow: 0px 0px 18px rgba(150, 150, 150, 0.6);
-    }
 </style>

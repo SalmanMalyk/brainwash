@@ -1,79 +1,159 @@
 <template>
-    <div v-touch:swipe.bottom="swipeBottomHandler" style="width: 100vw">
-        <div v-if="step === 1">
-            <div class="row">
-                <div class="col-6" @click="chooseCardType('hearts')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
-                </div>
-                <div class="col-6" @click="chooseCardType('spades')" :style="{ height: windowHeight/2 + 'px'}" style="background-color: #000!important;">
-                </div>
+  <v-touch @swipedown="swipeBottomHandler" :swipe-options="{ threshold: 200 }">
+<!--    <div v-touch:swipe.bottom="swipeBottomHandler" style="width: 100vw">-->
+    <div style="width: 100vw">
+      <div v-if="step === 1">
+          <div class="row">
+              <div class="col-6" @click="chooseCardType('hearts')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
+              </div>
+              <div class="col-6" @click="chooseCardType('spades')" :style="{ height: windowHeight/2 + 'px'}" style="background-color: #000!important;">
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-6" @click="chooseCardType('clubs')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
+              </div>
+              <div class="col-6" @click="chooseCardType('diamonds')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
+              </div>
+          </div>
+      </div>
+      <div v-else-if="step === 2">
+        <div v-if="$store.state.mode === 'ios'" class="row">
+          <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultIOS : this.$store.state.fakeScreen) + ')' }">
+            <div class="clock">
+              <div class="position-relative text-center">
+                <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/ios_padlock.png')"/>
+                <p class="time">{{ time }}</p>
+                <p class="date">{{ date }}</p>
+              </div>
             </div>
-            <div class="row">
-                <div class="col-6" @click="chooseCardType('clubs')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
-                </div>
-                <div class="col-6" @click="chooseCardType('diamonds')" :style="{ height: windowHeight/2 + 'px' }" style="background-color: #000!important;">
-                </div>
+            <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
+              <div class="position-relative text-center"
+                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                <VueAudioFake
+                    style="margin: 0 auto; position: relative"
+                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :loop="true"
+                    :autoplay="true"
+                    :width="windowWidth * 0.9"
+                ></VueAudioFake>
+              </div>
             </div>
+            <div class="row" style="margin: 0!important; position: absolute; bottom: 0; width: 100vw;">
+              <div class="col-6" style="text-align: left!important;">
+                <div style="padding-left: 2.6rem; padding-bottom: 2.8rem;">
+                  <img style="margin: 1.1rem auto!important; height: 3.4rem; background-color: #1A1A1D; border-radius: 3.4rem; background: rgba( 48, 48, 48, 0.60 ); box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.15 ); backdrop-filter: blur( 20px ); -webkit-backdrop-filter: blur( 20px );" :src="require('../assets/torch.png')"/>
+                </div>
+              </div>
+              <div class="col-6" style="text-align: right!important;">
+                <div style="padding-right: 2.6rem; padding-bottom: 2.8rem;">
+                  <img style="margin: 1.1rem auto!important; height: 3.4rem; background-color: #1A1A1D; border-radius: 3.4rem; background: rgba( 48, 48, 48, 0.60 ); box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.15 ); backdrop-filter: blur( 20px ); -webkit-backdrop-filter: blur( 20px );" :src="require('../assets/camera.png')"/>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div v-else-if="step === 2">
-            <div class="row">
-<!--                <div class="col-12 text-center" :style="{ height: windowHeight + 'px', backgroundColor: randomColor() }">-->
-<!--                    <img :src="$store.state.fakeScreen" style="width: 100%; height: auto"/>-->
-<!--                </div>-->
-                <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important;" :style="{ height: windowHeight + 'px', backgroundColor: randomColor(), backgroundImage: 'url(' + this.$store.state.fakeScreen + ')' }">
-                    <!--                    <img :src="$store.state.fakeScreen" style="width: 100%; height: auto; z-index: 1; position: relative; left: 0px; top: 0px;"/>-->
-                    <div class="clock">
-                        <div class="position-relative text-center">
-                            <p class="time" style="margin-bottom: 4px;">{{ time }}</p>
-                            <p class="date">{{ date }}</p>
-                        </div>
-                    </div>
-                    <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
-                        <div class="position-relative text-center"
-                             :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
-                            <VueAudioFake
-                                style="margin: 0 auto; position: relative"
-                                :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                                :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                                :loop="true"
-                                :autoplay="true"
-                                :width="windowWidth * 0.9"
-                            ></VueAudioFake>
-                        </div>
-                    </div>
-                </div>
+        <div v-else class="row">
+          <div class="col-12 text-center">
+            <div class="clock" style="z-index: 2!important;">
+              <div class="position-relative text-center">
+                <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/android_padlock.png')"/>
+                <p class="time" style="margin-top: 4rem;">{{ time }}</p>
+                <p class="date" style="font-weight: normal!important;">{{ date }}&nbsp;<img style="width: 35px;" :src="require('../assets/sunny-icon.jpg')"/>&nbsp;76°F</p>
+              </div>
             </div>
-        </div>
-        <div v-else-if="step === 3">
-            <div class="row" v-for="row in [1, 4, 7, 10]" :key="row">
-                <div @click="chooseCardNumber((row + col).toString())" v-for="col in range(3)" class="col-4" :style="{ height: windowHeight/4 + 'px' }" style="background-color: #000!important;" :key="col">
-                </div>
+            <div class="container py-0 px-0" style="z-index: 2!important; position: absolute; z-index: 2!important;">
+              <div class="position-relative text-center"
+                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                <VueAudioFakeAndroid
+                    style="margin: 0 auto; position: relative; z-index: 999;"
+                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :loop="true"
+                    :autoplay="true"
+                    :width="windowWidth * 0.9"
+                ></VueAudioFakeAndroid>
+              </div>
             </div>
-        </div>
-        <div v-else>
-            <div class="row">
-                <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important;" :style="{ height: windowHeight + 'px', backgroundColor: randomColor(), backgroundImage: 'url(' + this.$store.state.fakeScreen + ')' }">
-                    <div class="clock">
-                        <div class="position-relative text-center">
-                            <p class="time" style="margin-bottom: 4px;">{{ time }}</p>
-                            <p class="date">{{ date }}</p>
-                        </div>
-                    </div>
-                    <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
-                      <div class="position-relative text-center" :style="{ width: windowWidth + 'px', top: this.$store.state.top + 'px!important'}">
-                            <vue-audio
-                                style="margin: 0 auto; position: relative"
-                                :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                                :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
-                                :loop="true"
-                                :autoplay="true"
-                                :width="windowWidth * 0.9"
-                            ></vue-audio>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center" style="z-index: 1!important; filter: blur(10px); -webkit-filter: blur(10px);background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultAndroid : this.$store.state.fakeScreen) + ')' }">
             </div>
+          </div>
         </div>
-    </div>
+      </div>
+      <div v-else-if="step === 3">
+        <v-touch @swipe="chooseCardNumber((13).toString())" :swipe-options="{ threshold: 150, pointers: 2 }">
+          <div class="row" v-for="row in [1, 4, 7, 10]" :key="row">
+              <div @click="chooseCardNumber((row + col).toString())" v-for="col in range(3)" class="col-4" :style="{ height: windowHeight/4 + 'px' }" style="background-color: #000!important;" :key="col">
+              </div>
+          </div>
+        </v-touch>
+      </div>
+      <div v-else>
+        <div class="row" v-if="$store.state.mode === 'ios'">
+          <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultIOS : this.$store.state.fakeScreen) + ')' }">
+            <div class="clock">
+              <div class="position-relative text-center">
+                <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/ios_padlock.png')"/>
+                <p class="time">{{ time }}</p>
+                <p class="date">{{ date }}</p>
+              </div>
+            </div>
+            <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
+              <div class="position-relative text-center"
+                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                <vue-audio
+                    style="margin: 0 auto; position: relative"
+                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :loop="true"
+                    :autoplay="true"
+                    :width="windowWidth * 0.9"
+                ></vue-audio>
+              </div>
+            </div>
+            <div class="row" style="margin: 0!important; position: absolute; bottom: 0; width: 100vw;">
+              <div class="col-6" style="text-align: left!important;">
+                <div style="padding-left: 2.6rem; padding-bottom: 2.8rem;">
+                  <img style="margin: 1.1rem auto!important; height: 3.4rem; background-color: #1A1A1D; border-radius: 3.4rem; background: rgba( 48, 48, 48, 0.60 ); box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.15 ); backdrop-filter: blur( 20px ); -webkit-backdrop-filter: blur( 20px );" :src="require('../assets/torch.png')"/>
+                </div>
+              </div>
+              <div class="col-6" style="text-align: right!important;">
+                <div style="padding-right: 2.6rem; padding-bottom: 2.8rem;">
+                  <img style="margin: 1.1rem auto!important; height: 3.4rem; background-color: #1A1A1D; border-radius: 3.4rem; background: rgba( 48, 48, 48, 0.60 ); box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.15 ); backdrop-filter: blur( 20px ); -webkit-backdrop-filter: blur( 20px );" :src="require('../assets/camera.png')"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" v-else>
+          <div class="col-12 text-center">
+            <div class="clock" style="z-index: 2!important;">
+              <div class="position-relative text-center">
+                <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/android_padlock.png')"/>
+                <p class="time" style="margin-top: 4rem;">{{ time }}</p>
+                <p class="date" style="font-weight: normal!important;">{{ date }}&nbsp;<img style="width: 35px;" :src="require('../assets/sunny-icon.jpg')"/>&nbsp;76°F</p>
+              </div>
+            </div>
+            <div class="container py-0 px-0" style="z-index: 2!important; position: absolute; z-index: 2!important;">
+              <div class="position-relative text-center"
+                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                <VueAudioAndroid
+                    style="margin: 0 auto; position: relative; z-index: 999;"
+                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
+                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :loop="true"
+                    :autoplay="true"
+                    :width="windowWidth * 0.9"
+                ></VueAudioAndroid>
+              </div>
+            </div>
+            <div class="text-center" style="z-index: 1!important; filter: blur(10px); -webkit-filter: blur(10px);background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultAndroid : this.$store.state.fakeScreen) + ')' }">
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+  </v-touch>
 </template>
 
 <script>
@@ -81,13 +161,25 @@ const play = require('audio-play');
 const load = require('audio-loader');
 import VueAudio from "../components/vue-audio-better/src/VueAudio";
 import VueAudioFake from "../components/vue-audio-better/src/VueAudioFake";
+import VueAudioAndroid from "../components/vue-audio-better/src/VueAudio_Android";
+import VueAudioFakeAndroid from "../components/vue-audio-better/src/VueAudioFake_Android";
 export default {
     name: "perform",
     components: {
         VueAudio,
         VueAudioFake,
+        VueAudioAndroid,
+        VueAudioFakeAndroid,
     },
-    data() {
+    // metaInfo() {
+    //   return {
+    //     title: "Performance Mode",
+    //     meta: [
+    //       { name: 'apple-mobile-web-app-status-bar-style', content:  'black'},
+    //     ],
+    //   }
+    // },
+  data() {
         return {
             time: '',
             date: '',
@@ -107,9 +199,15 @@ export default {
           this.$router.go(-1)
         },
         updateTime() {
+          if (this.$store.state.mode === 'ios') {
             let cd = new Date();
-            this.time = this.zeroPadding(cd.getHours() === 0 ? 12 : cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2);
-            this.date = this.week[cd.getDay()] + ', ' + this.zeroPadding(cd.getDate(), 2) + ' ' + this.months[cd.getMonth()+1];
+            this.time = cd.getHours() === 0 ? 12 : cd.getHours() + ':' + this.zeroPadding(cd.getMinutes(), 2);
+            this.date = this.week[cd.getDay()] + ', ' + cd.getDate() + '. ' + this.months[cd.getMonth()];
+          } else {
+            let cd = new Date();
+            this.time = cd.getHours() === 0 ? 12 : cd.getHours() + ':' + this.zeroPadding(cd.getMinutes(), 2);
+            this.date = this.week[cd.getDay()].slice(0, 3) + ', '  + this.months[cd.getMonth()].slice(0, 3) + " " + cd.getDate();
+          }
         },
         zeroPadding(num, digit) {
             let zero = '';
@@ -232,12 +330,15 @@ export default {
             window.addEventListener('resize', this.onResize);
         })
     },
-
+    // beforeCreate() {
+    //   document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').setAttribute("content", "black");
+    // },
     beforeDestroy() {
         if (this.playback !== null) {
             this.playback.pause();
         }
         window.removeEventListener('resize', this.onResize);
+      // document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').setAttribute("content", "black-translucent");
     },
 
 
@@ -250,21 +351,22 @@ export default {
         font-weight: bold;
         color: #fff!important;
         position: absolute;
-        top: 8%;
+        top: 6%;
         margin-left: -1rem!important;
         width: 100% !important;
     }
     .time {
         /*font-weight: bold;*/
         color: #fff!important;
-        font-size: 4rem!important;
-        line-height: 1.2!important;
-        text-shadow: 0px 0px 18px rgba(150, 150, 150, 0.6);
+        font-size: 5rem!important;
+        line-height: 0.85!important;
+        text-shadow: 0 0 18px rgba(150, 150, 150, 0.6);
     }
     .date {
         /*font-weight: bold;*/
         color: #fff!important;
-        font-size: 1.4rem!important;
-        text-shadow: 0px 0px 18px rgba(150, 150, 150, 0.6);
+        font-size: 1.5rem!important;
+        font-weight: bold;
+        text-shadow: 0 0 18px rgba(150, 150, 150, 0.6);
     }
 </style>
