@@ -1,6 +1,6 @@
 {
   "name": "brainwash",
-  "version": "1.6.5-beta",
+  "version": "1.7.1-beta",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -45,6 +45,7 @@
     "vue-resizable": "^2.0.1",
     "vue-router": "^3.0.2",
     "vue-rx": "^6.2.0",
+    "vue-simple-spinner": "^1.2.10",
     "vue-slider-component": "^3.2.11",
     "vue-sweetalert2": "^4.1.1",
     "vue-touch": "^2.0.0-beta.4",

@@ -247,7 +247,7 @@ export default {
     mounted() {
       if (this.$store.state.mode === '') {
         const md = new bowser.getParser(window.navigator.userAgent)
-        const newVal = md.parsedResult.os.name === 'android' ? 'android' : 'ios'
+        const newVal = md.parsedResult.os.name.toLowerCase() === 'android' ? 'android' : 'ios'
         this.$store.state.mode = newVal
         this.$store.commit('setMode', newVal)
       }

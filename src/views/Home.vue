@@ -7,7 +7,7 @@
             <card style="background-color: rgba(0,0,0,0)">
               <div class="align-middle">
                 <div style="text-align: center;">
-                  <img src="img/brand/brainwash.png" style="width: 200px;" class="img-fluid floating logo">
+                  <img src="img/brand/brainwash.png" style="width: 200px;" class="img-fluid floating logo" alt="logo">
                 </div>
               </div>
             </card>
@@ -52,7 +52,7 @@ export default {
           // if ((isEmptyHearts || isEmptyClubs || isEmptyDiamonds || isEmptySpades || this.$store.state.fakeScreen === null || this.$store.state.fakeScreen === '')) {
           //     this.$swal.fire({
           //         icon: 'error',
-          //         title: 'Oops...',
+          //         title: 'Warning',
           //         text: 'Please complete the set-up first!',
           //         timer: 2500,
           //         timerProgressBar: true,

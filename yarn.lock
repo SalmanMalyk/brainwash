@@ -9360,6 +9360,11 @@ vue-rx@^6.2.0:
   resolved "https://registry.yarnpkg.com/vue-rx/-/vue-rx-6.2.0.tgz#c3b86462b252626edd16417385bb9054a3a23acb"
   integrity sha512-tpKUcqS5IUYS+HsdbR5TlE5LL9PK4zwlplEtmMeydnbqaUTa9ciLMplJXAtFSiQw1vuURoyEJmCXqMxaVEIloQ==
 
+vue-simple-spinner@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/vue-simple-spinner/-/vue-simple-spinner-1.2.10.tgz#d5b15e74f82848b2f4e1c8e8d54338701b9e7c90"
+  integrity sha512-hrDT+HVSBnesLXBni9SRSvZdiiJhbOFbRbASWcGXqNQpONoLIshEdG4BFv0l80Q7ysj46mGqI86my4gXHkDpCw==
+
 vue-slider-component@^3.2.11:
   version "3.2.11"
   resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.2.11.tgz#79e338dc5a32ca927a8f79ee55256197bd785235"

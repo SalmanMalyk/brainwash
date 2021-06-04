@@ -16,22 +16,6 @@
                             <h6 class="text-muted text-center mb-3">
                                 Device Registration
                             </h6>
-<!--                            <div class="btn-wrapper text-center">-->
-<!--                                <base-button type="neutral">-->
-<!--                                    <img slot="icon" src="img/icons/common/github.svg">-->
-<!--                                    Github-->
-<!--                                </base-button>-->
-
-<!--                                <base-button type="neutral">-->
-<!--                                    <img slot="icon" src="img/icons/common/google.svg">-->
-<!--                                    Google-->
-<!--                                </base-button>-->
-<!--                            </div>-->
-                        </template>
-                        <template>
-<!--                            <div class="text-center text-muted mb-4">-->
-<!--                                <small>Or sign up with credentials</small>-->
-<!--                            </div>-->
                             <form role="form" @submit.prevent="submit">
                                 <base-input alternative
                                             placeholder="First Name"
@@ -88,7 +72,7 @@
 <!--                                    </span>-->
 <!--                                </base-checkbox>-->
                                 <div class="text-center">
-                                    <base-button type="primary" class="my-4" nativeType="submit">Register device</base-button>
+                                    <base-button type="primary" class="my-4" nativeType="submit" :disabled="loader">Register device&nbsp;<Spinner v-if="loader" style="margin-top: 5px"/></base-button>
                                 </div>
                                 <p class="typo__p text-center text-warning" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
                             </form>
@@ -103,10 +87,12 @@
 import { required, minLength, email } from 'vuelidate/lib/validators'
 import Bowser from "bowser";
 import * as du from 'device-uuid'
+import Spinner from 'vue-simple-spinner'
 export default {
     name: "set-up",
     data: function() {
         return {
+            loader: false,
             firstName: null,
             lastName: null,
             email: null,
@@ -115,7 +101,8 @@ export default {
             accessError: false,
         };
     },
-    computed: {
+    components: {
+      Spinner
     },
     validations: {
         lastName: {
@@ -159,9 +146,12 @@ export default {
           this.accessCode = null
         },
         submit () {
+            const vm = this
+            this.loader = true
             this.$v.$touch()
             if (this.$v.$invalid) {
                 this.submitStatus = 'ERROR'
+                vm.loader = false
             } else {
                 const browser = Bowser.getParser(window.navigator.userAgent);
                 let osName = browser.getOS().name.toLowerCase()
@@ -183,8 +173,9 @@ export default {
                     }
                 }).then((response) => {
                     if (response.data.valid) {
-                        this.registerUser()
+                      this.registerUser()
                     } else {
+                        vm.loader = false
                         this.$swal({
                             toast: true,
                             position: 'top-end',
@@ -204,6 +195,7 @@ export default {
                         title: 'Invalid Access Code!',
                     })
                     this.accessError = true
+                    vm.loader = false
                     this.resetForm()
                 })
             }
@@ -246,6 +238,7 @@ export default {
                         icon: 'success',
                         title: 'Registered!',
                     })
+                    vm.loader = false
                     setTimeout(() => {
                         vm.$router.push({
                             path: '/'
@@ -264,6 +257,7 @@ export default {
                         title: 'Registration Error!',
                     })
                     this.resetForm()
+                    vm.loader = false
                 }
             }).catch((err) => {
                 this.$swal({
@@ -276,6 +270,7 @@ export default {
                 })
                 this.accessError = true
                 this.resetForm()
+                vm.loader = false
             })
         }
     },
