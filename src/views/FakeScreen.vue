@@ -31,7 +31,8 @@
 <!--                            <perfect-scrollbar style="height: 25rem!important;">-->
                           <base-button type="primary" @click="changeMode" class="mb-3" style="min-width: 13rem!important; margin-left: 8px;">Switch to {{ this.$store.state.mode === 'ios' ? 'Android' : 'IOS' }} Mode</base-button>
                           <base-button type="primary" @click="alignAudioPlayer" class="mb-3">Align Audio Player</base-button>
-                            <base-button type="primary" @click="deleteFakeScreen" class="mb-3">Delete wallpaper</base-button><br/>
+                          <base-button type="primary" @click="cropFakeScreen" class="mb-3">Crop wallpaper</base-button>
+                          <base-button type="primary" @click="deleteFakeScreen" class="mb-3">Delete wallpaper</base-button><br/>
 <!--                                <img :src="$store.state.fakeScreen" style="width: auto; height: 22rem;"/>-->
 <!--                            </perfect-scrollbar>-->
                         </card>
@@ -75,9 +76,14 @@ import { clipperFixed } from 'vuejs-clipper'
             swipeBottomHandler() {
               this.$router.go(-1)
             },
+            cropFakeScreen () {
+              this.$router.push({
+                path: '/set-up/crop-screen'
+              })
+            },
             deleteFakeScreen () {
-                this.$store.commit('setFakeScreen', '')
-                this.$store.commit('setMarginTop', '')
+              this.$store.commit('setFakeScreen', '')
+              this.$store.commit('setMarginTop', '')
             },
             alignAudioPlayer () {
                 this.$router.push({

@@ -21,6 +21,8 @@ import router from "./router";
 import store from "./store";
 import Argon from "./plugins/argon-kit";
 import './registerServiceWorker'
+import * as Sentry from "@sentry/vue";
+import { Integrations } from "@sentry/tracing";
 import VueYouTubeEmbed from 'vue-youtube-embed'
 import AudioRecorder from './components/vue-audio-recorder'
 import VueSweetalert2 from 'vue-sweetalert2';
@@ -66,8 +68,24 @@ Vue.use(VueYouTubeEmbed, { global: true, componentId: "youtube-media" })
 Vue.config.productionTip = false;
 Vue.use(Argon);
 screenOrientationJs.init();
+Sentry.init({
+  Vue,
+  dsn: "https://f6eff1d7832c46feb84503258e4b90a6@o849651.ingest.sentry.io/5816584",
+  integrations: [new Integrations.BrowserTracing()],
+  logErrors: true,
+  tracesSampleRate: 1.0,
+});
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
+// if (!process.env.NODE_ENV === 'development') {
+//   Sentry.init({
+//     Vue,
+//     dsn: "https://f6eff1d7832c46feb84503258e4b90a6@o849651.ingest.sentry.io/5816584",
+//     integrations: [new Integrations.BrowserTracing()],
+//     logErrors: true,
+//     tracesSampleRate: 1.0,
+//   });
+// }

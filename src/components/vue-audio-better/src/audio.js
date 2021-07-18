@@ -22,7 +22,7 @@ export default {
      */
     autoplay: {
       type: Boolean,
-      default: false
+      default: true
     },
     /**
      * Whether to start the playback again
@@ -30,7 +30,7 @@ export default {
      */
     loop: {
       type: Boolean,
-      default: false
+      default: true
     },
     /**
      * Whether to start downloading the audio
@@ -45,7 +45,7 @@ export default {
      */
     html5: {
       type: Boolean,
-      default: false
+      default: true
     },
     /**
      * An array of audio file types
@@ -83,7 +83,7 @@ export default {
       /**
        * The volume of the playback on a scale of 0 to 1
        */
-      volume: 1.0,
+      volume: 0.0,
       /**
        * The rate (speed) of the playback on a scale of 0.5 to 4
        */
@@ -183,7 +183,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this._initialize();
   },
 
@@ -231,13 +231,15 @@ export default {
         html5: this.html5,
         loop: this.loop,
         preload: this.preload,
-        autoplay: this.autoplay,
+        autoplay: true,
         mute: this.muted,
         rate: this.rate,
         format: this.formats,
         xhrWithCredentials: this.xhrWithCredentials
       });
-
+      if (!this.playing) {
+        this.$data._howl.play();
+      }
       const duration = this.$data._howl.duration();
       this.duration = duration;
 
@@ -272,7 +274,10 @@ export default {
      */
     _cleanup(resetSettings = true) {
       // Stop all playback
-      if (this.$data._howl) {
+      // if (this.$data === undefined || this.$data === null || this.$data._howl === undefined || this.$data._howl === null) {
+      //   return
+      // }
+      if (this.$data._howl !== undefined && this.$data._howl) {
         this.stop();
       }
 
@@ -284,7 +289,7 @@ export default {
       // Clear all event listeners
       this.$data._howlEvents.map(event => {
         if (event.handler) {
-          if (this.$data._howl) {
+          if (this.$data._howl !== undefined && this.$data._howl) {
             this.$data._howl.off(event.name, event.handler);
           }
 
@@ -303,7 +308,7 @@ export default {
 
       if (resetSettings) {
         this.muted = false;
-        this.volume = 1.0;
+        this.volume = 0.0;
         this.rate = 1.0;
       }
     },
@@ -333,27 +338,35 @@ export default {
      * Stop the playback (also resets the seek to 0)
      */
     stop() {
-      this.$data._howl.stop();
+      if (this.$data._howl !== undefined && this.$data._howl) {
+        this.$data._howl.stop();
+      }
     },
     /**
      * Mute the playback
      */
     mute() {
-      this.$data._howl.mute(true);
+      if (this.$data._howl !== undefined && this.$data._howl) {
+        this.$data._howl.mute(true);
+      }
       this.muted = true;
     },
     /**
      * Unmute the playback
      */
     unmute() {
-      this.$data._howl.mute(false);
+      if (this.$data._howl !== undefined && this.$data._howl) {
+        this.$data._howl.mute(false);
+      }
       this.muted = false;
     },
     /**
      * Toggle muting and unmuting the playback
      */
     toggleMute() {
-      this.$data._howl.mute(!this.muted);
+      if (this.$data._howl !== undefined && this.$data._howl) {
+        this.$data._howl.mute(!this.muted);
+      }
       this.muted = !this.muted;
     },
     /**
@@ -367,8 +380,10 @@ export default {
           `volume must be a number, got a ${typeof volume} instead`
         );
       }
+      this.$data._howl.volume(clamp(volume, 0.00, 1.00));
 
-      this.$data._howl.volume(clamp(volume, 0, 1));
+      // if (this.$data._howl !== undefined && this.$data._howl) {
+      // }
     },
     /**
      * Set the rate (speed) of the playback
@@ -379,8 +394,9 @@ export default {
       if (typeof rate !== "number") {
         throw new Error(`rate must be a number, got a ${typeof rate} instead`);
       }
-
-      this.$data._howl.rate(clamp(rate, 0.5, 4));
+      if (this.$data._howl !== undefined && this.$data._howl) {
+        this.$data._howl.rate(clamp(rate, 0.5, 4));
+      }
     },
     /**
      * Set the position of the playback
@@ -392,7 +408,11 @@ export default {
         throw new Error(`seek must be a number, got a ${typeof seek} instead`);
       }
 
-      this.$data._howl.seek(clamp(seek, 0, this.duration));
+      if (this.$data._howl !== undefined && this.$data._howl) {
+        this.$data._howl.seek(clamp(seek, 0, this.duration));
+      } else {
+        this.$data._howl.seek(clamp(0, 0, this.duration));
+      }
     },
     /**
      * Set the progress of the playback

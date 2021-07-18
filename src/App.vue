@@ -262,6 +262,9 @@ export default {
 };
 </script>
 <style>
+  html, body {
+    background-color: black!important;
+  }
   .not-selectable{
     -webkit-user-select: none!important;  /* Chrome all / Safari all */
     -moz-user-select: none!important;     /* Firefox all */

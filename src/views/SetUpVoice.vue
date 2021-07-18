@@ -48,6 +48,10 @@
                                               :card-number="x.toString()"
                                               :card-type="card"
                                           />
+<!--                                        <AudioRecorderMp3-->
+<!--                                            :card-number="x.toString()"-->
+<!--                                            :card-type="card"-->
+<!--                                          />-->
                                         </div>
                                     </div>
                                 </template>
@@ -66,18 +70,20 @@ import Tabs from '../components/Tabs/Tabs'
 import Modal from '../components/Modal'
 import TabPane from '../components/Tabs/TabPane'
 import AudioRecorderHold from './components/audio-recorder'
+import AudioRecorderMp3 from './components/recorder'
 import AudioRecorder from '../components/vue-audio-recorder/components/recorder'
 import { SlideYUpTransition, SlideXRightTransition } from 'vue2-transitions'
 import Bowser from "bowser";
 export default {
   name: "set-up",
   components: {
+    AudioRecorderMp3,
     Tabs,
     TabPane,
     Modal,
     SlideYUpTransition,
-      SlideXRightTransition,
-      AudioRecorderHold,
+    SlideXRightTransition,
+    AudioRecorderHold,
   },
     data: function() {
         return {

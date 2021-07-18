@@ -260,101 +260,58 @@ svg {
     }
   }
 
-  @import '../scss/icons';
+  @import 'scss/icons';
 </style>
 
 <template>
   <div
       class="vue-audio-recorder"
       :class="{
-        'active': isRecording2
+        'active': isRecording
       }"
       @click="toggleRecorder"
-  >
-    <span v-if="!isRecording2"></span>
+  ><br/>{{this.recording}}<br/>{{this.recorderState}}<br/>
+    <span v-if="!isRecording"></span>
     <i v-else style="font-size: 1.5rem; color: #fff; padding: 1.1rem" :class="{
-      'ni ni-button-pause': isRecording2}"></i>
+      'ni ni-button-pause': isRecording}"></i>
   </div>
 </template>
 
 <script>
-  import AudioPlayer from './player'
-  import Downloader  from './downloader'
-  import IconButton  from './icon-button'
-  import Recorder    from '../lib/recorder'
-  import Uploader    from './uploader'
-  import UploaderPropsMixin from '../mixins/uploader-props'
-  import { convertTimeMMSS }  from '../lib/utils'
+  import { Mp3MediaRecorder } from 'mp3-mediarecorder'
+  import mp3RecorderWorker from 'workerize-loader!./worker'
+  import {initMp3MediaEncoder} from "mp3-mediarecorder/worker";
+  // import { convertTimeMMSS }  from '../lib/utils'
 
   export default {
-    mixins: [UploaderPropsMixin],
+    name: "AudioRecorderMp3",
     props: {
-      attempts : { type: Number },
       time     : { type: Number },
-
-      bitRate    : { type: Number, default: 128   },
-      sampleRate : { type: Number, default: 44100 },
-
-      showDownloadButton : { type: Boolean, default: true },
-      showUploadButton   : { type: Boolean, default: true },
-      format: { type: String, default: 'mp3'},
       cardType: { type: String, default: 'hearts'},
       cardNumber: { type: String, default: '1'},
-
-      micFailed        : { type: Function },
-      beforeRecording  : { type: Function },
-      pauseRecording   : { type: Function },
-      // afterRecording   : { type: Function },
-      failedUpload     : { type: Function },
-      beforeUpload     : { type: Function },
-      successfulUpload : { type: Function },
-      selectRecord     : { type: Function }
     },
     data () {
       return {
-        isRecording2  : false,
-        isUploading   : false,
-        recorder      : this._initRecorder(),
-        recordList    : [],
-        selected      : {},
-        uploadStatus  : null,
+        workerCurrent : mp3RecorderWorker(),
+        isRecording   : false,
+        recorder      : null,
+        recording     : null,
+        recorderState : "inactive",
       }
     },
-    components: {
-      AudioPlayer,
-      Downloader,
-      IconButton,
-      Uploader
-    },
-    watch: {
-      isRecording: function (val, oldVal) {
-        if (!oldVal) {
-          setTimeout(() => { this.isRecording2 = !this.isRecording2 }, 250)
-        } else {
-          this.isRecording2 = !this.isRecording2
-        }
-      },
-    },
-    mounted () {
-      this.$eventBus.$on('start-upload', () => {
-        this.isUploading = true
-        this.beforeUpload && this.beforeUpload('before upload')
-      })
-
-      this.$eventBus.$on('end-upload', (msg) => {
-        this.isUploading = false
-
-        if (msg.status === 'success') {
-          this.successfulUpload && this.successfulUpload(msg.response)
-        } else {
-          this.failedUpload && this.failedUpload(msg.response)
-        }
-      })
-    },
     beforeDestroy () {
-      this.stopRecorder()
+      this.onStop()
     },
     methods: {
+      toggleRecorder () {
+        if (this.recorderState === "inactive") {
+          this.recorder = this._initRecorder()
+          this.isRecording = true
+        } else {
+          this.onStop()
+          this.isRecording = false
+        }
+      },
       async afterRecording (data) {
         function sleep(milliseconds) {
           const date = Date.now();
@@ -381,71 +338,69 @@ svg {
           vm.$store.commit('setRecord', saveData)
         }
       },
-      toggleRecorder () {
-        if (this.attempts && this.recorder.records.length >= this.attempts) {
-          return
-        }
-
-        if (!this.isRecording || (this.isRecording && this.isPause)) {
-          this.recorder.start()
-        } else {
-          this.recorder.stop()
-        }
+      onStop () {
+        this.recorder.stop();
       },
-      stopRecorder () {
-        if (!this.isRecording) {
-          return
-        }
-
-        this.recorder.stop()
-        this.recordList = this.recorder.recordList()
+      onStart () {
+        this.recorder.start();
       },
-      removeRecord (idx) {
-        this.recordList.splice(idx, 1)
-        this.$set(this.selected, 'url', null)
-        this.$eventBus.$emit('remove-record')
+      onPause () {
+        this.recorder.pause();
       },
-      choiceRecord (record) {
-        if (this.selected === record) {
-          return
-        }
-        this.selected = record
-        this.selectRecord && this.selectRecord(record)
+      onResume () {
+        this.recorder.resume();
       },
       _initRecorder () {
-        return new Recorder({
-          beforeRecording : this.beforeRecording,
-          afterRecording  : this.afterRecording,
-          pauseRecording  : this.pauseRecording,
-          micFailed       : this.micFailed,
-          bitRate         : this.bitRate,
-          sampleRate      : this.sampleRate,
-          format          : this.format
+        const vm = this
+        window.navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+          const recorder = new Mp3MediaRecorder(stream, {worker: vm.worker})
+          recorder.ondataavailable = (event) => {
+            console.log('ondataavailable', event.data)
+            vm.recording = URL.createObjectURL(event.data)
+          }
+          recorder.onstart = () => {
+            console.log('onstart')
+            vm.recorderState = 'recording'
+          }
+          recorder.onstop = () => {
+            console.log('onstop')
+            vm.recorderState = 'inactive'
+          }
+          recorder.onpause = () => {
+            console.log('onpause')
+            vm.recorderState = 'paused'
+          }
+          recorder.onresume = () => {
+            console.log('onresume')
+            vm.recorderState = 'recording'
+          }
+          recorder.start();
+          return recorder
+        }).catch((err) => {
+          console.log(err)
+          return null
         })
       }
     },
     computed: {
-      attemptsLeft () {
-        return this.attempts - this.recordList.length
-      },
-      iconButtonType () {
-        return this.isRecording && this.isPause ? 'mic' : this.isRecording ? 'pause' : 'mic'
-      },
-      isPause () {
-        return this.recorder.isPause
-      },
-      isRecording () {
-        return this.recorder.isRecording
-      },
-      recordedTime () {
-        if (this.time && this.recorder.duration >= this.time * 60) {
-          this.stopRecorder()
-        }
-        return convertTimeMMSS(this.recorder.duration)
-      },
-      volume () {
-        return parseFloat(this.recorder.volume)
-      }
+      // attemptsLeft () {
+      //   return this.attempts - this.recordList.length
+      // },
+      // iconButtonType () {
+      //   return this.isRecording && this.isPause ? 'mic' : this.isRecording ? 'pause' : 'mic'
+      // },
+      // isPause () {
+      //   return this.recorder.isPause
+      // },
+      // recordedTime () {
+      //   if (this.time && this.recorder.duration >= this.time * 60) {
+      //     this.stopRecorder()
+      //   }
+      //   return convertTimeMMSS(this.recorder.duration)
+      // },
+      // volume () {
+      //   return parseFloat(this.recorder.volume)
+      // }
     }
   }
 </script>

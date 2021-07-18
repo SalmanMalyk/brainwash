@@ -5,20 +5,10 @@
         <img style="height: 6rem; border-radius: 0.5rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/album_art_android.png')"/>
       </div>
       <div class="col-9 align-middle" style="line-height: 1.0rem; text-align: left; padding: 1.6rem 0 0.2rem 1.2rem !important; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;">
-        <!--        <span style="font-size: 13px; font-weight: bold; color:#C6C6C6;"><img style="height: 1.4rem; border-radius: 1.4rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );" :src="require('../../../assets/youtube-music.png')"/>&nbsp;Youtube Music</span>-->
         <span style="font-size: 13px; font-weight: bold; color:#C6C6C6;">Youtube Music</span>
         <div style="line-height: 1.6rem; color: #FFFFFF; font-weight: bold; font-size: 16px;">Brainwash Recording</div><br/>
       </div>
     </div>
-    <!--    <div class="slider" ref="slider" @click="handleModifyProgress">-->
-    <!--      <div class="progressInfo"></div>-->
-    <!--      <div class="process" :style="{width: pWidth}"></div>-->
-    <!--      <div class="thunk" ref="trunk" :style="{left}">-->
-    <!--        <div class="block"></div>-->
-    <!--      </div>-->
-    <!--      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.4rem; margin-top: 4px; position: absolute; left: 0px; color: #C6C6C6;">{{ _sToMs(seek) }}</span>-->
-    <!--      <span style="font-weight: bold; font-size: 0.82rem; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif; padding-top: 0.4rem; margin-top: 4px; position: absolute; right: 0px; color: #C6C6C6;">- {{ _sToMs(duration) }}</span>-->
-    <!--    </div>-->
     <div class="operatorButton" style="margin-top: 2.2rem; margin-bottom: 2rem;">
       <span class="iconfont">
         <img style="height: 1.6rem;" :src="require('../../../assets/Rewind_white.png')"/>
@@ -61,7 +51,7 @@ export default {
       rate: 1,
       isMute: true,
       curVolume: 0.0,
-      fakeVolume: 0.5,
+      fakeVolume: 0.0,
       // sliderVol:  0.5,
       totalWidth: 500
     }
@@ -163,7 +153,7 @@ export default {
     this.setVolume(this.curVolume);
     this.slider = this.$refs.slider;
     this.thunk = this.$refs.trunk;
-    this.sliderVol = this.$refs.sliderVol;
+    this.sliderVol = 0.0;
     this.thunkVol = this.$refs.trunkVol;
   },
 }

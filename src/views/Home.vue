@@ -49,17 +49,17 @@ export default {
           const isEmptyClubs = Object.values(this.$store.state.voiceData.clubs).some(x => (x === null || x === ''));
           const isEmptySpades = Object.values(this.$store.state.voiceData.spades).some(x => (x === null || x === ''));
           const isEmptyDiamonds = Object.values(this.$store.state.voiceData.diamonds).some(x => (x === null || x === ''));
-          // if ((isEmptyHearts || isEmptyClubs || isEmptyDiamonds || isEmptySpades || this.$store.state.fakeScreen === null || this.$store.state.fakeScreen === '')) {
-          //     this.$swal.fire({
-          //         icon: 'error',
-          //         title: 'Warning',
-          //         text: 'Please complete the set-up first!',
-          //         timer: 2500,
-          //         timerProgressBar: true,
-          //     })
-          // }
-          // else if(this.$store.state.marginTop === '')
-          if(this.$store.state.marginTop === '')
+          if (isEmptyHearts || isEmptyClubs || isEmptyDiamonds || isEmptySpades) {
+              this.$swal.fire({
+                  icon: 'error',
+                  title: 'Warning',
+                  text: 'Please complete the set-up first!',
+                  timer: 2500,
+                  timerProgressBar: true,
+              })
+          }
+          else if(this.$store.state.marginTop === '')
+          // if(this.$store.state.marginTop === '')
           {
               this.$swal.fire({
                   icon: 'error',

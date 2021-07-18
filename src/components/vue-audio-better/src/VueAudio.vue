@@ -47,7 +47,7 @@
           </span>
         </div>
         <div class="col-10" style="padding: 0px 10px!important; ">
-          <vue-slider v-model="curVolume" :min="0" :max="1" :interval="0.1" style="height: 5.5px!important;" v-bind="options" :silent="true" tooltip="none" />
+          <vue-slider v-model="curVolume" :min="0" :max="1" :interval="0.05" style="height: 5.5px!important;" v-bind="options" :silent="true" tooltip="none" />
         </div>
         <div class="col-1" style="line-height: 1.4!important; padding: 0px!important;">
           <span style="line-height: 1.4!important; padding: 0px!important;" class="iconfont" @click="handleSetFakeVolume(true)">
@@ -78,12 +78,12 @@ export default {
       min: 0,
       max: 100,
       slider: null,
-      sliderVol: 1,
+      sliderVol: 0.0,
       thunk: null,
       per: 0,
       rate: 1,
       isMute: true,
-      curVolume: 1,
+      curVolume: 0.0,
       fakeVolume: 0.5,
       // sliderVol:  0.5,
       totalWidth: 500
@@ -91,7 +91,6 @@ export default {
   },
   watch: {
     curProgress(v) {
-      // 避免拖拽未完成 进度发生变化
       if (!document.onmouseup) {
         this.per = v;
       }
@@ -112,7 +111,6 @@ export default {
       let curProgress = ((Math.round((this.progress * 10000)))/100.00).toFixed(2);
       return curProgress;
     },
-    // 设置一个百分比，提供计算slider进度width和trunk的left值
     scale(){
       let scale = (this.per - this.min) / (this.max - this.min);
       return scale;
@@ -156,7 +154,7 @@ export default {
       this.toggleMute();
     },
     handleSetVolume(flag) {
-      flag ? this.curVolume += 0.1 : this.curVolume -= 0.1;
+      flag ? this.curVolume += 0.05 : this.curVolume -= 0.05;
       this.curVolume > 1 ? this.curVolume = 1 : this.curVolume < 0 ? this.curVolume = 0 : '';
       this.setVolume(this.curVolume);
     },
@@ -185,7 +183,8 @@ export default {
     this.setVolume(this.curVolume);
     this.slider = this.$refs.slider;
     this.thunk = this.$refs.trunk;
-    this.sliderVol = this.$refs.sliderVol;
+    // this.sliderVol = this.$refs.sliderVol;
+    this.sliderVol = 0.0;
     this.thunkVol = this.$refs.trunkVol;
   },
 }

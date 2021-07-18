@@ -16,6 +16,7 @@ import FakeScreen from "./views/FakeScreen";
 import SetUpVoice from "./views/SetUpVoice";
 import SetUp from "./views/SetUp";
 import SetUpPlayer from "./views/SetUpPlayer";
+import ScreenCrop from "@/views/ScreenCrop";
 Vue.use(Router);
 
 const router = new Router({
@@ -74,6 +75,18 @@ const router = new Router({
       components: {
         header: Header,
         default: FakeScreen,
+        footer: Footer
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/set-up/crop-screen",
+      name: "crop-screen-set-up",
+      components: {
+        header: Header,
+        default: ScreenCrop,
         footer: Footer
       },
       meta: {

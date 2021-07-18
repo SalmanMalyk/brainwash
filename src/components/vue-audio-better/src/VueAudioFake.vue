@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       options: {
-        dotSize: 14,
+        dotSize: 15,
       },
       min: 0,
       max: 100,
@@ -84,14 +84,13 @@ export default {
       rate: 1,
       isMute: true,
       curVolume: 0.0,
-      fakeVolume: 0.5,
+      fakeVolume: 0.0,
       // sliderVol:  0.5,
       totalWidth: 500
     }
   },
   watch: {
     curProgress(v) {
-      // 避免拖拽未完成 进度发生变化
       if (!document.onmouseup) {
         this.per = v;
       }
@@ -156,7 +155,7 @@ export default {
       this.toggleMute();
     },
     handleSetVolume(flag) {
-      flag ? this.curVolume += 0.1 : this.curVolume -= 0.1;
+      flag ? this.curVolume += 0.05 : this.curVolume -= 0.05;
       this.curVolume > 1 ? this.curVolume = 1 : this.curVolume < 0 ? this.curVolume = 0 : '';
       this.curVolume = 0
       this.setVolume(this.curVolume);
@@ -183,10 +182,14 @@ export default {
       this.totalWidth = this.width + 'px';
     }
     // 设置音量
+    if (typeof this.curVolume !== "number" ) {
+      this.curVolume = 0.0;
+    }
     this.setVolume(this.curVolume);
     this.slider = this.$refs.slider;
     this.thunk = this.$refs.trunk;
-    this.sliderVol = this.$refs.sliderVol;
+    // this.sliderVol = this.$refs.sliderVol;
+    this.sliderVol = 0.0;
     this.thunkVol = this.$refs.trunkVol;
   },
 }

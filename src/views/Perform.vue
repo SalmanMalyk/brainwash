@@ -17,8 +17,8 @@
           </div>
       </div>
       <div v-else-if="step === 2">
-        <div v-if="$store.state.mode === 'ios'" class="row">
-          <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultIOS : this.$store.state.fakeScreen) + ')' }">
+        <div v-if="mode === 'ios'" class="row">
+          <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + ($store.state.fakeScreen === '' ? $store.state.fakeScreenDefaultIOS : $store.state.fakeScreen) + ')' }">
             <div class="clock">
               <div class="position-relative text-center">
                 <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/ios_padlock.png')"/>
@@ -28,11 +28,11 @@
             </div>
             <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
               <div class="position-relative text-center"
-                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                   :style="{ width: windowWidth+'px', top: $store.state.top + 'px!important'}">
                 <VueAudioFake
                     style="margin: 0 auto; position: relative"
-                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :file-name="cardNameAndType(cardType, cardNumber)"
+                    :audio-source="voiceData[cardType][cardNumber]"
                     :loop="true"
                     :autoplay="true"
                     :width="windowWidth * 0.9"
@@ -64,18 +64,18 @@
             </div>
             <div class="container py-0 px-0" style="z-index: 2!important; position: absolute; z-index: 2!important;">
               <div class="position-relative text-center"
-                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                   :style="{ width: windowWidth+'px', top: $store.state.top + 'px!important'}">
                 <VueAudioFakeAndroid
                     style="margin: 0 auto; position: relative; z-index: 999;"
-                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :file-name="cardNameAndType(cardType, cardNumber)"
+                    :audio-source="voiceData[cardType][cardNumber]"
                     :loop="true"
                     :autoplay="true"
                     :width="windowWidth * 0.9"
                 ></VueAudioFakeAndroid>
               </div>
             </div>
-            <div class="text-center" style="z-index: 1!important; filter: blur(10px); -webkit-filter: blur(10px);background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultAndroid : this.$store.state.fakeScreen) + ')' }">
+            <div class="text-center" style="z-index: 1!important; filter: blur(10px); -webkit-filter: blur(10px);background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + ($store.state.fakeScreen === '' ? $store.state.fakeScreenDefaultAndroid : $store.state.fakeScreen) + ')' }">
             </div>
           </div>
         </div>
@@ -89,8 +89,8 @@
         </v-touch>
       </div>
       <div v-else>
-        <div class="row" v-if="$store.state.mode === 'ios'">
-          <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultIOS : this.$store.state.fakeScreen) + ')' }">
+        <div class="row" v-if="mode === 'ios'">
+          <div class="col-12 text-center" style="background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + ($store.state.fakeScreen === '' ? $store.state.fakeScreenDefaultIOS : $store.state.fakeScreen) + ')' }">
             <div class="clock">
               <div class="position-relative text-center">
                 <img style="margin: 1rem auto 1.3rem auto!important; height: 2.3rem;" :src="require('../assets/ios_padlock.png')"/>
@@ -100,11 +100,11 @@
             </div>
             <div class="container py-0 px-0" style="position: absolute; z-index: 2!important;">
               <div class="position-relative text-center"
-                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                   :style="{ width: windowWidth+'px', top: $store.state.top + 'px!important'}">
                 <vue-audio
                     style="margin: 0 auto; position: relative"
-                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :file-name="cardNameAndType(cardType, cardNumber)"
+                    :audio-source="voiceData[cardType][cardNumber]"
                     :loop="true"
                     :autoplay="true"
                     :width="windowWidth * 0.9"
@@ -136,18 +136,18 @@
             </div>
             <div class="container py-0 px-0" style="z-index: 2!important; position: absolute; z-index: 2!important;">
               <div class="position-relative text-center"
-                   :style="{ width: windowWidth+'px', top: this.$store.state.top + 'px!important'}">
+                   :style="{ width: windowWidth+'px', top: $store.state.top + 'px!important'}">
                 <VueAudioAndroid
                     style="margin: 0 auto; position: relative; z-index: 999;"
-                    :file-name="this.cardNameAndType(this.cardType, this.cardNumber)"
-                    :audio-source="this.$store.state.voiceData[this.cardType][this.cardNumber]"
+                    :file-name="cardNameAndType(cardType, cardNumber)"
+                    :audio-source="voiceData[cardType][cardNumber]"
                     :loop="true"
                     :autoplay="true"
                     :width="windowWidth * 0.9"
                 ></VueAudioAndroid>
               </div>
             </div>
-            <div class="text-center" style="z-index: 1!important; filter: blur(10px); -webkit-filter: blur(10px);background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + (this.$store.state.fakeScreen === '' ? this.$store.state.fakeScreenDefaultAndroid : this.$store.state.fakeScreen) + ')' }">
+            <div class="text-center" style="z-index: 1!important; filter: blur(10px); -webkit-filter: blur(10px);background-repeat: no-repeat; background-size: 100%!important; background-color: #000;" :style="{ height: windowHeight + 'px', backgroundImage: 'url(' + ($store.state.fakeScreen === '' ? $store.state.fakeScreenDefaultAndroid : $store.state.fakeScreen) + ')' }">
             </div>
           </div>
         </div>
@@ -157,6 +157,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 const play = require('audio-play');
 const load = require('audio-loader');
 import VueAudio from "../components/vue-audio-better/src/VueAudio";
@@ -171,6 +173,9 @@ export default {
         VueAudioAndroid,
         VueAudioFakeAndroid,
     },
+  computed: {
+    ...mapState(['mode', 'voiceData']),
+  },
     // metaInfo() {
     //   return {
     //     title: "Performance Mode",
@@ -199,7 +204,7 @@ export default {
           this.$router.go(-1)
         },
         updateTime() {
-          if (this.$store.state.mode === 'ios') {
+          if (this.mode === 'ios') {
             let cd = new Date();
             this.time = cd.getHours() === 0 ? 12 : cd.getHours() + ':' + this.zeroPadding(cd.getMinutes(), 2);
             this.date = this.week[cd.getDay()] + ', ' + cd.getDate() + '. ' + this.months[cd.getMonth()];
@@ -232,7 +237,7 @@ export default {
             // this.playSound()
         },
         async playSound() {
-            const audioBuffer = await load(this.$store.state.voiceData[this.cardType][this.cardNumber])
+            const audioBuffer = await load(this.voiceData[this.cardType][this.cardNumber])
             this.playback = play(audioBuffer, {
                 loop: true,
                 volume: 1,
