@@ -72,7 +72,7 @@
     "@vue/cli-plugin-eslint": "^3.4.0",
     "@vue/cli-plugin-pwa": "~4.5.0",
     "@vue/cli-service": "^3.4.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.6",
     "workerize-loader": "^1.3.0"
