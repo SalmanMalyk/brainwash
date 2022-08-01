@@ -13,7 +13,7 @@ export default {
       required: true,
       validator(audioSource) {
         // Every audioSource must be a non-empty string
-        return typeof audioSource === "string" && audioSource.length > 0
+        return typeof audioSource === "string" && audioSource.length > 0;
       }
     },
     /**
@@ -30,7 +30,7 @@ export default {
      */
     loop: {
       type: Boolean,
-      default: true
+      default: false
     },
     /**
      * Whether to start downloading the audio
@@ -165,7 +165,7 @@ export default {
         {
           name: "seek",
           hook: () => {
-            if(!this.playing) this.seek = this.$data._howl.seek();
+            if (!this.playing) this.seek = this.$data._howl.seek();
           }
         },
         "fade"
@@ -180,7 +180,7 @@ export default {
     progress() {
       if (this.duration === 0) return 0;
       return this.seek / this.duration;
-    },
+    }
   },
 
   mounted() {
@@ -228,7 +228,7 @@ export default {
       this.$data._howl = new Howl({
         src: this.audioSource,
         volume: this.volume,
-        html5: this.html5,
+        html5: false,
         loop: this.loop,
         preload: this.preload,
         autoplay: true,
@@ -237,6 +237,7 @@ export default {
         format: this.formats,
         xhrWithCredentials: this.xhrWithCredentials
       });
+
       if (!this.playing) {
         this.$data._howl.play();
       }
@@ -380,7 +381,8 @@ export default {
           `volume must be a number, got a ${typeof volume} instead`
         );
       }
-      this.$data._howl.volume(clamp(volume, 0.00, 1.00));
+
+      this.$data._howl.volume(clamp(volume, 0.0, 1.0));
 
       // if (this.$data._howl !== undefined && this.$data._howl) {
       // }

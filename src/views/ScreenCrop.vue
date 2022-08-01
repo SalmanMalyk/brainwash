@@ -1,241 +1,187 @@
 <template>
-  <div>
-    <div class="header">
-      <h2>Vue CropperJS</h2>
-      <a href="https://github.com/Agontuk/vue-cropperjs">Github</a>
-    </div>
-    <hr />
+  <v-touch @swipedown="swipeBottomHandler" :swipe-options="{ threshold: 200 }">
+    <div>
+      <section
+        class="section section section-shaped my-0 overflow-hidden"
+        style="height: 100%!important;"
+      >
+        <div class="container py-0" style="height: 100%!important;">
+          <div class="row row-grid align-items-center">
+            <div
+              class="col-12"
+              style="text-align: center!important; padding: 0px!important; margin: 0.75rem!important; padding-top: 1.3rem;"
+            >
+              <h2 class="display-4 text-white">Crop Wallpaper</h2>
+              <div
+                class="col-12"
+                style="text-align: center!important; margin-top:0px!important;"
+              >
+                <card shadow class="card-bg shadow-lg--hover mt-2 tool-card">
+                  <file-selector
+                    accept-extensions=".jpg,.png"
+                    :multiple="false"
+                    @validated="setImage"
+                    class="mb-3"
+                  >
+                    <base-button type="primary" class="btn-sm">
+                      Upload Image</base-button
+                    >
+                  </file-selector>
 
-    <input
-        ref="input"
-        type="file"
-        name="image"
-        accept="image/*"
-        @change="setImage"
-    />
+                  <base-button
+                    type="primary"
+                    @click.prevent="deleteFakeScreen"
+                    class="btn-sm"
+                    :disabled="$store.state.fakeScreen == ''"
+                    >Remove Wallpaper</base-button
+                  >
+                </card>
+              </div>
 
-    <div class="content">
-      <section class="cropper-area">
-        <div class="img-cropper">
-          <vue-cropper
-              ref="cropper"
-              :aspect-ratio="16 / 9"
-              :src="imgSrc"
-              preview=".preview"
-          />
-        </div>
-        <div class="actions">
-          <a
-              href="#"
-              role="button"
-              @click.prevent="zoom(0.2)"
-          >
-            Zoom In
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="zoom(-0.2)"
-          >
-            Zoom Out
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(-10, 0)"
-          >
-            Move Left
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(10, 0)"
-          >
-            Move Right
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(0, -10)"
-          >
-            Move Up
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(0, 10)"
-          >
-            Move Down
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="rotate(90)"
-          >
-            Rotate +90deg
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="rotate(-90)"
-          >
-            Rotate -90deg
-          </a>
-          <a
-              ref="flipX"
-              href="#"
-              role="button"
-              @click.prevent="flipX"
-          >
-            Flip X
-          </a>
-          <a
-              ref="flipY"
-              href="#"
-              role="button"
-              @click.prevent="flipY"
-          >
-            Flip Y
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="cropImage"
-          >
-            Crop
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="reset"
-          >
-            Reset
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="getData"
-          >
-            Get Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="setData"
-          >
-            Set Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="getCropBoxData"
-          >
-            Get CropBox Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="setCropBoxData"
-          >
-            Set CropBox Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="showFileChooser"
-          >
-            Upload Image
-          </a>
-        </div>
+              <!-- cropper -->
+              <div
+                class="col-12"
+                style="text-align: center!important; margin-top:0px!important;"
+              >
+                <card shadow class="card-bg crop-card">
+                  <div class="q-action">
+                    <button
+                      type="button"
+                      @click.prevent="reset"
+                      title="Rest Crop"
+                    >
+                      <i class="fa fa-minus fa-fw"></i>
+                    </button>
 
-        <textarea v-model="data" />
-      </section>
-      <section class="preview-area">
-        <p>Preview</p>
-        <div class="preview" />
-        <p>Cropped Image</p>
-        <div class="cropped-image">
-          <img
-              v-if="cropImg"
-              :src="cropImg"
-              alt="Cropped Image"
-          />
-          <div v-else class="crop-placeholder" />
+                    <button
+                      type="button"
+                      @click.prevent="rotate(90)"
+                      title="Rotate +90deg"
+                    >
+                      <i class="fa fa-undo fa-fw"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      ref="flipX"
+                      @click.prevent="flipX"
+                      title="Flip-X"
+                    >
+                      <i class="fa fa-arrows-h fa-fw"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      ref="flipY"
+                      @click.prevent="flipY"
+                      title="Flip-Y"
+                    >
+                      <i class="fa fa-arrows-v fa-fw"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      @click.prevent="saveFile"
+                      title="Save Image"
+                    >
+                      <i class="fa fa-check fa-fw"></i>
+                    </button>
+                  </div>
+                  <perfect-scrollbar style="height: 50vh">
+                    <vue-cropper
+                      ref="cropper"
+                      :src="imgSrc || getDefaultWallpaper"
+                      :view-mode="3"
+                    />
+                  </perfect-scrollbar>
+                </card>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
-  </div>
+  </v-touch>
 </template>
 
 <script>
-// import { h } from 'vue'
-// import VueCropper from 'vue-cropperjs';
-// import 'cropperjs/dist/cropper.css';
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 export default {
   name: "ScreenCrop",
-  components: {
-    // VueCropper,
-  },
+  components: { VueCropper },
   data: function() {
     return {
       imgSrc: this.$store.state.fakeScreen,
-      cropImg: '',
-      data: null,
-    }
-  },
-  computed: {},
-  mounted() {
-
+      os: this.$store.state.mode,
+      dimensions: {
+        w: window.screen.width,
+        h: window.screen.height,
+      },
+    };
   },
   methods: {
-    cropImage() {
-      // get image data for post processing, e.g. upload or setting image src
-      this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+    swipeBottomHandler() {
+      this.$router.go(-1);
     },
+
     flipX() {
       const dom = this.$refs.flipX;
-      let scale = dom.getAttribute('data-scale');
+      let scale = dom.getAttribute("data-scale");
       scale = scale ? -scale : -1;
       this.$refs.cropper.scaleX(scale);
-      dom.setAttribute('data-scale', scale);
+      dom.setAttribute("data-scale", scale);
     },
     flipY() {
       const dom = this.$refs.flipY;
-      let scale = dom.getAttribute('data-scale');
+      let scale = dom.getAttribute("data-scale");
       scale = scale ? -scale : -1;
       this.$refs.cropper.scaleY(scale);
-      dom.setAttribute('data-scale', scale);
+      dom.setAttribute("data-scale", scale);
     },
-    getCropBoxData() {
-      this.data = JSON.stringify(this.$refs.cropper.getCropBoxData(), null, 4);
-    },
-    getData() {
-      this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-    },
-    move(offsetX, offsetY) {
-      this.$refs.cropper.move(offsetX, offsetY);
-    },
+
     reset() {
       this.$refs.cropper.reset();
     },
     rotate(deg) {
       this.$refs.cropper.rotate(deg);
     },
-    setCropBoxData() {
-      if (!this.data) return;
-      this.$refs.cropper.setCropBoxData(JSON.parse(this.data));
+
+    deleteFakeScreen() {
+      this.$refs.cropper.replace(this.getDefaultWallpaper);
+      this.$store.commit("setFakeScreen", "");
+      this.$swal({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        icon: "success",
+        title: "Image removed successfully!",
+      });
     },
-    setData() {
-      if (!this.data) return;
-      this.$refs.cropper.setData(JSON.parse(this.data));
+
+    saveFile() {
+      let data = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      this.$store.commit("setFakeScreen", data);
+      this.$swal({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        icon: "success",
+        title: "Image saved successfully!",
+      });
+      this.$refs.cropper.replace(data);
     },
-    setImage(e) {
-      const file = e.target.files[0];
-      if (file.type.indexOf('image/') === -1) {
-        alert('Please select an image file');
+
+    setImage(result, files) {
+      let file = files[0];
+
+      if (file.type.indexOf("image/") === -1) {
+        alert("Please select an image file");
         return;
       }
-      if (typeof FileReader === 'function') {
+      if (typeof FileReader === "function") {
         const reader = new FileReader();
         reader.onload = (event) => {
           this.imgSrc = event.target.result;
@@ -244,87 +190,65 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        alert('Sorry, FileReader API not supported');
+        alert("Sorry, FileReader API not supported");
       }
     },
-    showFileChooser() {
-      this.$refs.input.click();
-    },
-    zoom(percent) {
-      this.$refs.cropper.relativeZoom(percent);
+    gcd(a, b) {
+      return b == 0 ? a : this.gcd(b, a % b);
     },
   },
-}
+  computed: {
+    getDefaultWallpaper: function() {
+      return this.os === "ios"
+        ? this.$store.state.fakeScreenDefaultIOS
+        : this.$store.state.fakeScreenDefaultAndroid;
+    },
+    getAspectRatio: function() {
+      var w = window.screen.width;
+      var h = window.screen.height;
+      var r = this.gcd(w, h);
+      return Math.floor(w / r) + "/" + Number(h / r);
+    },
+  },
+};
 </script>
 
-<style scoped>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  width: 1024px;
-  margin: 0 auto;
-}
-input[type="file"] {
-  display: none;
-}
-.header {
+<style lang="scss">
+.tool-card .card-body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0 5px 0;
 }
-.header h2 {
-  margin: 0;
+
+.crop-card {
+  position: relative;
+  .q-action {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button {
+      background-color: rgba($color: #000000, $alpha: 0.4);
+      color: #fff;
+      border: 0;
+      padding: 10px 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba($color: #000000, $alpha: 1);
+      }
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
 }
-.header a {
-  text-decoration: none;
-  color: black;
-}
-.content {
-  display: flex;
-  justify-content: space-between;
-}
-.cropper-area {
-  width: 614px;
-}
-.actions {
-  margin-top: 1rem;
-}
-.actions a {
-  display: inline-block;
-  padding: 5px 15px;
-  background: #0062CC;
-  color: white;
-  text-decoration: none;
-  border-radius: 3px;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-}
-textarea {
-  width: 100%;
-  height: 100px;
-}
-.preview-area {
-  width: 307px;
-}
-.preview-area p {
-  font-size: 1.25rem;
-  margin: 0;
-  margin-bottom: 1rem;
-}
-.preview-area p:last-of-type {
-  margin-top: 1rem;
-}
-.preview {
-  width: 100%;
-  height: calc(372px * (9 / 16));
-  overflow: hidden;
-}
-.crop-placeholder {
-  width: 100%;
-  height: 200px;
-  background: #ccc;
-}
-.cropped-image img {
-  max-width: 100%;
+
+.cropper {
+  background: #000;
 }
 </style>
